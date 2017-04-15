@@ -1,0 +1,60 @@
+0;
+
+type = "Rhyscitlema_Objects_Definition_Text" ;
+
+message = "
+           left-click on a graph
+
+      or  right-click on a camera
+
+
+ click, maintain and move the mouse to turn
+
+ press ctrl, maintain and move the mouse to shift
+
+
+ http://www.rhyscitlema.com/applications/graph-plotter-3d
+
+";
+
+\mfet{0;
+ type =  "Camera" ;
+ name =  "Camera 1" ;
+ file = "|file.mfet" ;
+
+ origin =  (0,0,30);
+
+ axes = file.Turn((1,0,0), (0,-1,0), (0,1,0), turnAngle);
+
+ rectangle = (100, 100, 350, 250, 0, 0) := current + CameraResize ;
+
+ zoom =  1 := file.zoomCamera(current) ;
+
+ private movement  = ((0,0,0) := file.moveCamera(current));
+ private turnAngle = ((0,0,0) := file.turnCamera(current));
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph 1" ;
+ file = "|file.mfet" ;
+
+ origin = movement ;
+
+ axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
+
+ private movement  =  (0,0,0) := file.moveObject(current) ;
+ private turnAngle =  (0,0,0) := file.turnObject(current) ;
+
+ private f(x,y,z) = x^6 + y^6 - x^2 ;
+ function(x,y,z) = f(x/4, y/4, z/4) ;
+
+ colour(x,y,z) = (x,y,z,1);
+
+ private bdy = 4 ;
+ private bdx = bdy ;
+
+ boundary = {-bdx, bdx, -bdy, bdy, 0, 0.5} ;
+
+ accuracy =  4 ;
+}

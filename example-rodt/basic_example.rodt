@@ -1,0 +1,62 @@
+0;
+
+type = "Rhyscitlema_Objects_Definition_Text" ;
+
+message = "
+           left-click on a graph
+
+      or  right-click on a camera
+
+
+ click, maintain and move the mouse to turn
+
+ press ctrl, maintain and move the mouse to shift
+
+
+ http://www.rhyscitlema.com/applications/graph-plotter-3d
+
+";
+
+\mfet{0;
+ type =  "Camera" ;
+ name =  "Camera0" ;
+
+ origin =  {0,0,0} ;
+ axes =  {1,0,0},{0,1,0},{0,0,1} ;
+
+ rectangle =  {100, 100, 400, 300, 0, 0};
+ zoom =  1 ;
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph1" ;
+
+ origin =  (0, 0, 10) :=
+            current + Mouse_Left * 
+           (MouseMotion * PixelSize .* (10, 10, 10));
+
+ axes =  {1,0,0},{0,1,0},{0,0,1} ;
+
+ function(x,y,z) =  0 ;
+ colour(x,y,z) =  {x,y,z,1} ;
+
+ boundary =  {0,1,0,1,0,1} ;
+ accuracy =  1 ;
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph2" ;
+
+ origin =  (-1, 0, 10) := "|file.mfet".moveObject(current);
+
+ axes =  {1,0,0},{0,1,0},{0,0,1} ;
+
+ function(x,y,z) =  y - sin(5x) ;
+ colour(x,y,z) =  cabs(x,y,z,1) ;
+
+ boundary =  {-1,1,-1,1,-1,1} ;
+ accuracy =  10 ;
+}
+

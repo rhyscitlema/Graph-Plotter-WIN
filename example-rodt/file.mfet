@@ -1,0 +1,42 @@
+0;
+
+ public Turn(x,y,vector,angle) = xy(turn(x, rotate(x, angle[1])*y, vector, angle)) ;
+
+ private xy(x,y) = {x, y, x*y} ;
+
+ private turn(x,y,vector,angle) = (x,y) * (rotate(vector, angle[0]) * rotate(x*y, angle[2]))^T ;
+
+ # get a rotation matrix about the given vector for the given angle:
+ private rotate ((u0, u1, u2), angle) =
+
+             ( u0*u0*(1-cos(angle)) +    cos(angle) ,
+               u0*u1*(1-cos(angle)) - u2*sin(angle) ,
+               u0*u2*(1-cos(angle)) + u1*sin(angle) ),
+
+             ( u1*u0*(1-cos(angle)) + u2*sin(angle) ,
+               u1*u1*(1-cos(angle)) +    cos(angle) ,
+               u1*u2*(1-cos(angle)) - u0*sin(angle) ),
+
+             ( u2*u0*(1-cos(angle)) - u1*sin(angle) ,
+               u2*u1*(1-cos(angle)) + u0*sin(angle) ,
+               u2*u2*(1-cos(angle)) +    cos(angle) ) ;
+
+
+ public zoomCamera(current) = current + (not RightClick and not CtrlPress) * MouseMotion[2] / 20 ;
+
+ public moveCamera(current) = current + CtrlPress * (CameraAxes^T * (MouseMotion ./ (4, 4, 4))) ;
+
+ public turnCamera(current) = current + RightClick * (MouseMotion * PixelSize .* (-1, -1, 10)) ;
+
+
+ private D = CameraDistance * PixelSize ;
+
+ public moveObject(current) = current + CtrlPress * (CameraAxes^T * (MouseMotion .* (D, D, 4))) ;
+
+ public turnObject(current) = current + LeftClick * (MouseMotion * PixelSize .* (10, -10, 10)) ;
+
+
+ private CtrlPress  = Key_Ctrl;
+ private LeftClick  = Mouse_Left;
+ private RightClick = Mouse_Right;
+

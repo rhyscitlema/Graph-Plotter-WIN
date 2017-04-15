@@ -1,0 +1,72 @@
+0;
+
+type = "Rhyscitlema_Objects_Definition_Text" ;
+
+message = "
+           left-click on a graph
+
+      or  right-click on a camera
+
+
+ click, maintain and move the mouse to turn
+
+ press ctrl, maintain and move the mouse to shift
+
+
+ http://www.rhyscitlema.com/applications/graph-plotter-3d
+
+";
+
+\mfet{ width, height ;
+
+ type =  "Surface" ;
+ name =  "Image1" ;
+ file = "|file.mfet" ;
+
+ origin =  movement + {0,0,0} ;
+
+ axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
+
+ private movement  =  (0,0,0) := file.moveObject(current) ;
+ private turnAngle =  (0,0,0) := file.turnObject(current) ;
+
+ private image = "image.jpeg";
+ enclosed wh = GetImageWidthHeight(image) ;
+ private width  = wh[0];
+ private height = wh[1];
+
+ private nx_px = ((0,  width-1) -  width/2)*PixelSize ;
+ private ny_py = ((0, height-1) - height/2)*PixelSize ;
+ private nx = nx_px[0];
+ private px = nx_px[1];
+ private ny = ny_py[0];
+ private py = ny_py[1];
+ boundary = {nx, px, ny, py, 0, 0} ;
+
+ private X(x) = ( width-1)*(x-nx)/(px-nx) ;
+ private Y(y) = (height-1)*(y-ny)/(py-ny) ;
+ private f(colour) = colour==(0,0,0,1) ? (0,0,0,1) : colour ;
+ colour(x,y,z) = f(GetImagePixelColour(image, X(x), Y(y))) ;
+
+ function(x,y,z) =  0 ;
+ accuracy =  1 ;
+}
+
+\mfet{0;
+ type =  "Camera";
+ name =  "Camera1";
+ file = "|file.mfet" ;
+
+ origin =  movement + {0,0,0} ;
+ axes   = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
+
+ private movement  = ((0,0,0) := file.moveCamera(current));
+ private turnAngle = ((0,0,0) := file.turnCamera(current));
+
+ private wh = "Image1".wh ;
+
+ rectangle = (100, 100, wh[0], wh[1], 0, 0) := current + CameraResize ;
+
+ zoom =  1 := file.zoomCamera(current) ;
+}
+

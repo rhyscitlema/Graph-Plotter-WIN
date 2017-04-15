@@ -1,0 +1,216 @@
+0;
+
+type = "Rhyscitlema_Objects_Definition_Text" ;
+
+message = "
+           left-click on a graph
+
+      or  right-click on a camera
+
+
+ click, maintain and move the mouse to turn
+
+ press ctrl, maintain and move the mouse to shift
+
+
+ http://www.rhyscitlema.com/applications/graph-plotter-3d
+
+";
+
+\mfet{0;
+ type =  "Camera" ;
+ name =  "Camera 20" ;
+ file = "|file.mfet" ;
+
+ origin =  position + movement ;
+
+ axes   = file.Turn(direction, (0,0,-1), (0,0,1), turnAngle);
+
+ rectangle = (100, 100, 400, 300, 0 ,0) := current + CameraResize ;
+
+ zoom =  0.5 := file.zoomCamera(current) ;
+
+ private movement  = ((0,0,0) := file.moveCamera(current));
+ private turnAngle = ((0,0,0) := file.turnCamera(current));
+
+ private u = time*pi/12;
+ private dst = 100;
+ private position  = ( dst*cos(u), dst*sin(u), 0 );
+ private direction = ( -sin(u), cos(u), 0 );
+}
+
+\mfet{0;
+ type =  "Camera" ;
+ name =  "Camera 21" ;
+ file = "|file.mfet" ;
+
+ origin =  {0,0,0} + movement ;
+ axes = file.Turn((1,0,0), (0,0,-1), (0,0,1), turnAngle);
+
+ private movement  = ((0,0,0) := file.moveCamera(current));
+ private turnAngle = ((0,0,0) := file.turnCamera(current));
+
+ rectangle = (100, 500, 400, 150, 0 ,0) := current + CameraResize ;
+ zoom =  0.5 := file.zoomCamera(current) ;
+}
+
+
+\mfet{0;
+ type = "Surface" ;
+ name = "Surface" ;
+ file = "|file.mfet" ;
+ boundary = {0,0,0,0,0,0};
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph 21" ;
+
+ origin =  { 30, 0, 0 } + movement ;
+
+ axes = file.Turn((0,-1,0), (0.7,0,0.7), (0,0,1), turnAngle + (0,0,4*time));
+
+ private movement  = ((0,0,0) := file.moveObject(current));
+ private turnAngle = ((0,0,0) := file.turnObject(current));
+
+ private bdr = 8 ;
+ private k = bdr-1 ;
+ private a = 2.5 ;
+
+ function(x,y,z) =  z ;
+
+ private limit(x,y,z) =  -k-cos(a*y) <= x and x <= k+cos(a*y)
+                     and -k-cos(a*x) <= y and y <= k+cos(a*x);
+
+ private wh = GetImageWidthHeight("image.jpeg") - (1,1);
+ private width  = wh[0];
+ private height = wh[1];
+
+ getpixel(x,y,z) = GetImagePixelColour(
+                        "image.jpeg" ,
+                        (bdr+x)*width /(2*bdr) ,
+                        (bdr+y)*height/(2*bdr) );
+
+ colour(x,y,z) = not limit(x,y,z) ? (0,0,0,0) : getpixel(x,y,z);
+
+ boundary =  {-bdr, bdr, -bdr, bdr, 0, 0} ;
+ accuracy =  1 ;
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph 22" ;
+
+ origin =  { 0, 30, 0 } + movement ;
+
+ axes = file.Turn((1,0,0), (0,1,0.1), (0,0,1), turnAngle);
+
+ private movement  = ((0,0,0) := file.moveObject(current));
+ private turnAngle = ((0,0,0) := file.turnObject(current));
+
+ private c = 1 + sin(u) ;
+ private u = time*pi/2 ;
+ private bdr = 8 ;
+
+ function(x,y,z) =  z/c - sin(x/c) ;
+
+ colour(x,y,z) = (x^2 + y^2 <= bdr^2) ? cabs(x/2, y/2, (1-z/c)/2, 1) : {0,0,0,0};
+
+ boundary =  {-bdr, bdr, -bdr, bdr, -c, c} ;
+ accuracy =  8 ;
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph 23" ;
+
+ origin =  { 0, -30, 0 } + movement ;
+
+ axes = file.Turn((0.8, -0.6, 0), (0.4, 0.6, 0.7), (0,0,1), turnAngle);
+
+ private movement  = ((0,0,0) := file.moveObject(current));
+ private turnAngle = ((0,0,0) := file.turnObject(current)) + (0,0,4*time);
+
+ private bdx = 4 ;
+ private bdy = bdx;
+ private bdz = 6 ;
+
+ function(x,y,z) =  z - (0.5 x^3 - 3x + 0.5 y^3 - 3y) ;
+ colour(x,y,z) =  cabs(x/bdx, y/bdy, z/bdz, 1) ;
+ boundary =  {-bdx, bdx, -bdy, bdy, -bdz, bdz} ;
+ accuracy =  10 ;
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph 24" ;
+
+ origin =  { -30, 0, 0 } + movement ;
+
+ axes = file.Turn((-1,0,0), (0,0,1), (0,0,1), turnAngle + (0,0,4*time));
+
+ function(x,y,z) =  y + x*tan(z) ;
+
+ colour(x,y,z) = (x^2 + y^2 <= bdr^2) ? cabs(1-cabs(x/bdr, y/bdr, z/bdz, 0)) : {0,0,0,0};
+
+ boundary =  {-bdr, bdr, -bdr, bdr, -bdz, bdz} ;
+
+ accuracy =  50 ;   bdr=5; bdz=10;
+
+ private movement  = ((0,0,0) := file.moveObject(current));
+ private turnAngle = ((0,0,0) := file.turnObject(current));
+
+ # Note: higher accuracy and bigger boundary
+ # significantly reduce the speed of execution.
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph 25" ;
+
+ private u = time*pi/6 ;
+ private a = 12 ;
+
+ origin = movement +
+       { (4a + a * sin(20u)) cos(u) ,
+         (4a + a * sin(20u)) sin(u) ,
+               a * cos(20u)         };
+ # above in {} is the vector equation of the toroidal spiral
+
+ axes = file.Turn((1,0,0), (0,1,0), (0,0,1), turnAngle);
+
+ private movement  = ((0,0,0) := file.moveObject(current));
+ private turnAngle = ((0,0,0) := file.turnObject(current));
+
+ function(x,y,z) =  x^2 + y^2 + z^2 - bdr^2 ;
+
+ colour(x,y,z) =  (1 + {x/bdr, y/bdr, z/bdr, 1} )./2;
+
+ boundary =  {-bdr, bdr, -bdr, bdr, -bdr, bdr} ;
+ accuracy =  4 ;    bdr = 4 ;
+}
+
+\mfet{0;
+ type =  "Surface" ;
+ name =  "Graph 26" ;
+
+ origin =  { 0, -150, -35 } + movement ;
+
+ axes = file.Turn((-d1, 0, d0), (d0, 0, d1), (0,0,1), turnAngle);
+
+ private movement  = ((0,0,0) := file.moveObject(current));
+ private turnAngle = ((0,0,0) := file.turnObject(current));
+
+ function(x,y,z) =  z/c - sin( 0.1 x^2  +  0.1 y^2 ) ;
+
+ colour(x,y,z) = (x^2 + y^2 <= bdr^2) ? cabs(x/bdr, y/bdr, (1-z/c)/2, 1) : {0,0,0,0} ;
+
+ boundary =  {-bdr, bdr, -bdr, bdr, -c, c} ;
+ accuracy =  10 ;    bdr = 12;
+
+ private d0 = -sin(u) ;
+ private d1 =  cos(u) ;
+ private c  = 2(1+sin(u)) ;
+ private u  = time*pi/2 ;
+}
+
