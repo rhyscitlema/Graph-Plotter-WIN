@@ -1,7 +1,7 @@
 [Project]
 FileName=GraphPlotter3D.dev
 Name=GraphPlotter3D
-UnitCount=39
+UnitCount=42
 Type=0
 Ver=1
 ObjFiles=
@@ -20,7 +20,7 @@ ObjectOutput=
 OverrideOutput=0
 OverrideOutputName=GraphPlotter3D.exe
 HostApplication=
-Folders=algorithms,lib_std,libmfet,librodt,resource,userinterface,userinterface/dialog_boxes
+Folders=algorithms,lib_std,libmfet,librodt,resource,rw_image_file,userinterface,userinterface/dialog_boxes
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -378,16 +378,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit35]
-FileName=..\..\read_write_image_file\rwif.c
-CompileCpp=0
-Folder=librodt
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit36]
 FileName=..\..\lib_std\_texts.c
 CompileCpp=0
 Folder=lib_std
@@ -397,10 +387,20 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit37]
+[Unit36]
 FileName=..\..\librodt\timer.c
 CompileCpp=0
 Folder=librodt
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit37]
+FileName=..\userinterface\keyboard.c
+CompileCpp=0
+Folder=userinterface
 Compile=1
 Link=1
 Priority=1000
@@ -418,7 +418,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit38]
-FileName=..\userinterface\keyboard.c
+FileName=..\userinterface\mthread.c
 CompileCpp=0
 Folder=userinterface
 Compile=1
@@ -428,9 +428,39 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit39]
-FileName=..\userinterface\mthread.c
+FileName=..\..\read_write_image_file\rwif_any.c
 CompileCpp=0
-Folder=userinterface
+Folder=rw_image_file
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit40]
+FileName=..\..\read_write_image_file\rwif_bmp.c
+CompileCpp=0
+Folder=rw_image_file
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit41]
+FileName=..\..\read_write_image_file\rwif_jpeg.c
+CompileCpp=0
+Folder=rw_image_file
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit42]
+FileName=..\..\read_write_image_file\rwif_png.c
+CompileCpp=0
+Folder=rw_image_file
 Compile=1
 Link=1
 Priority=1000

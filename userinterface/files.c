@@ -106,7 +106,7 @@ bool save_file_as (const mchar* fileName)
         if(!BrowseForSavefile (hWnd, filename)) return FALSE;
     }
 
-    if(!Savefile (fileName, userinterface_get_text(UI_main_text), -1))
+    if(!Savefile (fileName, userinterface_get_text(UI_MAIN_TEXT), -1))
     {
         sprintf2(errormessage, L"Failed to save the file:\r\n%s", fileName);
         MessageBox(hWnd, errormessage, L"Error", MB_OK);

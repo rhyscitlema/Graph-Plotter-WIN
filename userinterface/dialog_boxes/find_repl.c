@@ -14,7 +14,7 @@ static HWND hWnd_active;
 HWND hWnd_find;
 HWND hWnd_repl;
 
-#define SIZE 1000
+#define SIZE 10000
 static TCHAR find_text[6*SIZE];
 static TCHAR repl_text[6*SIZE];
 static TCHAR* buffer = NULL;
@@ -141,17 +141,22 @@ static bool repl_next (HWND hWnd)
     mchar findtext[SIZE];
     mchar repltext[SIZE];
 
+    // get what is currently selected
     SendMessage (hWnd_active, EM_GETSEL, (WPARAM)&start, (LPARAM)&stop);
     hWnd_get_text (&buffer, hWnd_active);
     strcpy22S (buffer, buffer+start, stop-start);
 
+    // get the text to be found and replaced
     GET_FIND_TEXT(hWnd);
     strcpy22(findtext, pcn_to_chr_22(0,find_text)); fsize = strlen2(findtext);
 
+    // check if what is selected matches with the text to be replaced
     if(match_found(buffer, stop-start, findtext, fsize, 0))
     {
+        // get the text to replace with
         GET_REPL_TEXT(hWnd);
     	strcpy22(repltext, pcn_to_chr_22(0,repl_text)); rsize = strlen2(repltext);
+        // finally do the replacement
         SendMessage (hWnd_active, EM_REPLACESEL, TRUE, (LPARAM)repltext);
     }
     return find_next(hWnd);

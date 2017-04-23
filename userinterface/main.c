@@ -98,7 +98,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
     if(!createMainWindow (hInstance, nCmdShow)) return false;
 
     // install or initialise timer device
-    timer_install(hWnd_main_window);
+    timer_install_do();
 
     // load launched file
     load_launched_file();
@@ -320,10 +320,10 @@ static void main_window_create (HWND hWnd)
     hWnd_eval_button   = create_button (hWnd, IDC_EVAL_BUTTON       , L"=");
     hWnd_lock_button   = create_button (hWnd, IDC_LOCK_BUTTON       , NULL);
 
-    hWnd_prev_button    = create_button (hWnd, IDC_PREV_BUTTON      , L"Prev" );
-    hWnd_next_button    = create_button (hWnd, IDC_NEXT_BUTTON      , L"Next" );
-    hWnd_delete_button  = create_button (hWnd, IDC_DELETE_BUTTON    , L"Dele" );
-    hWnd_clear_button   = create_button (hWnd, IDC_CLEAR_BUTTON     , L"Clear");
+    hWnd_prev_button    = create_button (hWnd, IDC_PREV_BUTTON      , (TCHAR*)CST21(TEXT_PREV));
+    hWnd_next_button    = create_button (hWnd, IDC_NEXT_BUTTON      , (TCHAR*)CST21(TEXT_NEXT));
+    hWnd_delete_button  = create_button (hWnd, IDC_DELETE_BUTTON    , (TCHAR*)CST21(TEXT_DELE));
+    hWnd_clear_button   = create_button (hWnd, IDC_CLEAR_BUTTON     , (TCHAR*)CST21(TEXT_CLEAR));
 
     hWnd_pause_button   = create_button (hWnd, IDC_PAUSE_BUTTON     , (TCHAR*)CST21(TEXT_RESUME));
     hWnd_forward_button = create_button (hWnd, IDC_FORWARD_BUTTON   , (TCHAR*)CST21(TEXT_BACKWARD));
@@ -339,11 +339,11 @@ static void main_window_destroy (HWND hWnd)
 {
     if(check_save_changes())
     {   // deal with any future call to check_save_changes()
-        // especially since tools_clean() calls UI_main_text
+        // especially since tools_clean() calls UI_MAIN_TEXT
         SendMessage (hWnd_main_text , WM_SETTEXT, 0, 0);
         set_undo (hWnd_main_text, 0);
 
-        tools_clean();
+        //tools_clean();
         DestroyWindow(hWnd);
     }
 }
@@ -543,7 +543,7 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
          break;
 
     case WM_DESTROY:
-        tools_clean();
+        //tools_clean();
         font_remove();
         PostQuitMessage(0);
         break;
