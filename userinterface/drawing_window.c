@@ -178,7 +178,7 @@ DrawingWindow drawing_window_new ()
 
 
 
-void drawing_window_name (DrawingWindow hWnd, const mchar* name)
+void drawing_window_name (DrawingWindow hWnd, const wchar* name)
 { SetWindowText ((HWND)hWnd, name); }
 
 void drawing_window_move (DrawingWindow hWnd)

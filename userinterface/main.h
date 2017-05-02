@@ -46,7 +46,7 @@ void get_caret_position (HWND hWnd_text, int *line_ptr, int *coln_ptr);
 
 bool keyboard_input_event (HWND dw, UINT message, WPARAM wParam, LPARAM lParam);
 
-static inline int hWnd_get_text (mchar** buffer_ptr, HWND hWnd)
+static inline int hWnd_get_text (wchar** buffer_ptr, HWND hWnd)
 {
     int length;
     if(buffer_ptr==NULL) return 0;

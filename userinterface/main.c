@@ -169,7 +169,7 @@ bool SetWindowTitle (HWND hWnd, const TCHAR* fileName, bool fileExists)
 {
     TCHAR title[MAX_FILE_NAME];
     EnableMenuItem(hMenu_file, IDM_RELOAD, (fileExists ? MF_ENABLED : MF_GRAYED));
-    sprintf2(title, CST21("%s - %s "), get_name_from_path_name(NULL, fileName), szTitle);
+    sprintf2(title, L"%s - %s ", get_name_from_path_name(NULL, fileName), szTitle);
     return SetWindowText(hWnd, title);
 }
 
@@ -179,21 +179,21 @@ static void SetStatusBar (HWND hWnd_text)
 {
     static int Line, Coln;
     int line, coln;
-    mchar str[100];
+    wchar str[100];
 
     get_caret_position (hWnd_text, &line, &coln);
     if(Line==line && Coln==coln) return;
     Line=line; Coln=coln;
 
-    sprintf2(str, CST21(" Line:Coln %s:%s "), TIS2(0,line), TIS2(1,coln));
+    sprintf2(str, L" Line:Coln %s:%s ", TIS2(0,line), TIS2(1,coln));
     SendMessage (hWnd_status_bar, WM_SETTEXT, 0, (LPARAM)str);
 }
 
 
 
-static bool on_launch_or_drop_file (const mchar* fileName)
+static bool on_launch_or_drop_file (const wchar* fileName)
 {
-    const mchar* extension;
+    const wchar* extension;
     if(!open_file(fileName)) { display_message(errorMessage()); return false; }
     get_path_from_path_name (default_file_path, fileName);
     extension = get_extension_from_name(NULL, fileName);
@@ -206,9 +206,9 @@ static bool on_launch_or_drop_file (const mchar* fileName)
 static void load_launched_file ()
 {
     int i;
-    mchar str[MAX_PATH_SIZE];
-    mchar* argv=NULL;
-    const mchar* CmdLine;
+    wchar str[MAX_PATH_SIZE];
+    wchar* argv=NULL;
+    const wchar* CmdLine;
     CmdLine = GetCommandLine();
     CmdLine = sgets2(CmdLine, NULL);  // skip the program file name
     for(i=1; ; i++)
@@ -271,9 +271,9 @@ bool main_window_resize ()
     return true;
 }
 
-static HWND create_button (HWND hWnd, int ID, TCHAR* name)
+static HWND create_button (HWND hWnd, int ID, const char* name)
 {
-    return CreateWindowEx (0, TEXT("BUTTON"), name,
+    return CreateWindowEx (0, L"BUTTON", (const TCHAR*)CST21(name),
                            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
                            0,0,0,0, hWnd, (HMENU)(UINT_PTR)ID, main_hInst, NULL);
 }
@@ -281,56 +281,56 @@ static HWND create_button (HWND hWnd, int ID, TCHAR* name)
 static void main_window_create (HWND hWnd)
 {
     hWnd_main_text =
-        CreateWindowEx (0, TEXT("EDIT"), L"",
+        CreateWindowEx (0, L"EDIT", L"",
                         WS_TABSTOP | WS_VISIBLE | WS_CHILD | WS_HSCROLL | WS_VSCROLL |
                         ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_WANTRETURN,
                         0,0,0,0, hWnd, (HMENU)IDC_MAIN_TEXT, main_hInst, NULL);
     hWnd_mesg_text =
-        CreateWindowEx (WS_EX_CLIENTEDGE, TEXT("EDIT"), L"",
+        CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L"",
                         WS_TABSTOP | WS_VISIBLE | WS_CHILD | WS_VSCROLL |
                         ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_READONLY,
                         0,0,0,0, hWnd, (HMENU)IDC_MESG_TEXT, main_hInst, NULL);
     hWnd_path_text =
-        CreateWindowEx (WS_EX_CLIENTEDGE, TEXT("EDIT"), L"",
+        CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L"",
                         WS_TABSTOP | WS_VISIBLE | WS_CHILD | ES_WANTRETURN | ES_AUTOHSCROLL,
                         0,0,0,0, hWnd, (HMENU)IDC_PATH_TEXT, main_hInst, NULL);
     hWnd_time_text =
-        CreateWindowEx (WS_EX_CLIENTEDGE, TEXT("EDIT"), L"",
+        CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L"",
                         WS_TABSTOP | WS_VISIBLE | WS_CHILD | ES_WANTRETURN | ES_AUTOHSCROLL,
                         0,0,0,0, hWnd, (HMENU)IDC_TIME_TEXT, main_hInst, NULL);
     hWnd_calc_input =
         #ifdef LIBRODT
-		CreateWindowEx (WS_EX_CLIENTEDGE, TEXT("EDIT"), L" LocalPointedPoint",
+		CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L" LocalPointedPoint",
         #else
-		CreateWindowEx (WS_EX_CLIENTEDGE, TEXT("EDIT"), L" 1+1 ",
+		CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L" 1+1 ",
         #endif
                         WS_TABSTOP | WS_VISIBLE | WS_CHILD |
                         ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_WANTRETURN,
                         0,0,0,0, hWnd, (HMENU)IDC_CALC_INPUT, main_hInst, NULL);
     hWnd_calc_result =
-        CreateWindowEx (WS_EX_CLIENTEDGE, TEXT("EDIT"), L"",
+        CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L"",
                         WS_TABSTOP | WS_VISIBLE | WS_CHILD |
                         ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_READONLY ,
                         0,0,0,0, hWnd, (HMENU)IDC_CALC_RESULT, main_hInst, NULL);
     hWnd_status_bar =
-        CreateWindowEx (0, TEXT("STATIC"), TEXT(""),
+        CreateWindowEx (0, L"STATIC", L"",
                         WS_VISIBLE | WS_CHILD,
                         0,0,0,0, hWnd, (HMENU)IDC_STATUS_BAR, main_hInst, NULL);
 
-    hWnd_eval_button   = create_button (hWnd, IDC_EVAL_BUTTON       , L"=");
+    hWnd_eval_button   = create_button (hWnd, IDC_EVAL_BUTTON       , TEXT_EVAL);
     hWnd_lock_button   = create_button (hWnd, IDC_LOCK_BUTTON       , NULL);
 
-    hWnd_prev_button    = create_button (hWnd, IDC_PREV_BUTTON      , (TCHAR*)CST21(TEXT_PREV));
-    hWnd_next_button    = create_button (hWnd, IDC_NEXT_BUTTON      , (TCHAR*)CST21(TEXT_NEXT));
-    hWnd_delete_button  = create_button (hWnd, IDC_DELETE_BUTTON    , (TCHAR*)CST21(TEXT_DELE));
-    hWnd_clear_button   = create_button (hWnd, IDC_CLEAR_BUTTON     , (TCHAR*)CST21(TEXT_CLEAR));
+    hWnd_prev_button    = create_button (hWnd, IDC_PREV_BUTTON      , TEXT_PREV);
+    hWnd_next_button    = create_button (hWnd, IDC_NEXT_BUTTON      , TEXT_NEXT);
+    hWnd_delete_button  = create_button (hWnd, IDC_DELETE_BUTTON    , TEXT_DELE);
+    hWnd_clear_button   = create_button (hWnd, IDC_CLEAR_BUTTON     , TEXT_CLEAR);
 
-    hWnd_pause_button   = create_button (hWnd, IDC_PAUSE_BUTTON     , (TCHAR*)CST21(TEXT_RESUME));
-    hWnd_forward_button = create_button (hWnd, IDC_FORWARD_BUTTON   , (TCHAR*)CST21(TEXT_BACKWARD));
-    hWnd_lower_button   = create_button (hWnd, IDC_LOWER_BUTTON     , (TCHAR*)CST21(TEXT_LOWER));
-    hWnd_higher_button  = create_button (hWnd, IDC_HIGHER_BUTTON    , (TCHAR*)CST21(TEXT_HIGHER));
+    hWnd_pause_button   = create_button (hWnd, IDC_PAUSE_BUTTON     , TEXT_RESUME);
+    hWnd_forward_button = create_button (hWnd, IDC_FORWARD_BUTTON   , TEXT_BACKWARD);
+    hWnd_lower_button   = create_button (hWnd, IDC_LOWER_BUTTON     , TEXT_LOWER);
+    hWnd_higher_button  = create_button (hWnd, IDC_HIGHER_BUTTON    , TEXT_HIGHER);
 
-    hWnd_calc_button    = create_button (hWnd, IDC_CALC_BUTTON, (TCHAR*)CST21(TEXT_CALC));
+    hWnd_calc_button    = create_button (hWnd, IDC_CALC_BUTTON      , TEXT_CALC);
 
     main_window_resize();
 }

@@ -12,17 +12,17 @@
 static HWND hWnd_dialog_box;
 #endif
 
-static void (*user_entry_get) (mchar* entry);
+static void (*user_entry_get) (wchar* entry);
 
-static const mchar* (*user_entry_apply) (const mchar* entry);
+static const wchar* (*user_entry_apply) (const wchar* entry);
 
 
 
 /* Message handler for the dialog box. */
 static INT_PTR CALLBACK DialogBoxProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    mchar entry[300];
-    const mchar* error;
+    wchar entry[300];
+    const wchar* error;
     UNREFERENCED_PARAMETER(lParam);
 
     switch (message)
@@ -70,7 +70,7 @@ static INT_PTR CALLBACK DialogBoxProc (HWND hWnd, UINT message, WPARAM wParam, L
 
 
 
-bool create_dialog_box (HWND hWnd, int IDD, void (*_user_entry_get) (mchar* entry), const mchar* (*_user_entry_apply) (const mchar* entry))
+bool create_dialog_box (HWND hWnd, int IDD, void (*_user_entry_get) (wchar* entry), const wchar* (*_user_entry_apply) (const wchar* entry))
 {
     user_entry_get = _user_entry_get;
     user_entry_apply = _user_entry_apply;
@@ -91,16 +91,16 @@ bool create_dialog_box (HWND hWnd, int IDD, void (*_user_entry_get) (mchar* entr
 
 
 
-static mchar* buffer=NULL;
+static wchar* buffer=NULL;
 
-static void user_entry_get_for_goto (mchar* entry)
+static void user_entry_get_for_goto (wchar* entry)
 {
     int line;
     get_caret_position(hWnd_main_text, &line, NULL);
     intToStr(entry, line);
 }
 
-static const mchar* user_entry_apply_for_goto (const mchar* entry)
+static const wchar* user_entry_apply_for_goto (const wchar* entry)
 {
     int i, j, k, n;
     HWND hWnd_active = hWnd_main_text;

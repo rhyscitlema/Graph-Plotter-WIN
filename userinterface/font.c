@@ -98,7 +98,7 @@ bool font_dialog_box (HWND hWnd)
 
 
 static int start, stop;
-static mchar* buffer = NULL;
+static wchar* buffer = NULL;
 
 static bool get_text (HWND hWnd)
 {
@@ -109,7 +109,7 @@ static bool get_text (HWND hWnd)
     return TRUE;
 }
 
-static bool replace_text (const mchar* text)
+static bool replace_text (const wchar* text)
 {
     SendMessage (hWnd_focused, EM_REPLACESEL, TRUE, (LPARAM)text);
     SendMessage (hWnd_focused, EM_SETSEL, start, start+strlen2(text));

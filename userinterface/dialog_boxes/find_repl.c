@@ -14,9 +14,9 @@ static HWND hWnd_active;
 HWND hWnd_find;
 HWND hWnd_repl;
 
-#define SIZE 10000
-static TCHAR find_text[6*SIZE];
-static TCHAR repl_text[6*SIZE];
+#define MAXSIZE 10000
+static TCHAR find_text[6*MAXSIZE];
+static TCHAR repl_text[6*MAXSIZE];
 static TCHAR* buffer = NULL;
 
 
@@ -25,12 +25,12 @@ static TCHAR* buffer = NULL;
 #define ID_REPL 0x481
 
 #define GET_FIND_TEXT(hWnd) { \
-    *((LPWORD)find_text) = SIZE; \
+    *((LPWORD)find_text) = MAXSIZE; \
     fsize = (int)SendDlgItemMessage (hWnd, ID_FIND, EM_GETLINE, 0, (LPARAM)find_text); \
     find_text[fsize] = '\0'; } \
 
 #define GET_REPL_TEXT(hWnd) { \
-    *((LPWORD)repl_text) = SIZE; \
+    *((LPWORD)repl_text) = MAXSIZE; \
     rsize = (int)SendDlgItemMessage (hWnd, ID_REPL, EM_GETLINE, 0, (LPARAM)repl_text); \
     repl_text[rsize] = '\0'; } \
 
@@ -89,7 +89,7 @@ static bool find_next (HWND hWnd)
 {
     bool found = false;
     int i, start, stop, length, fsize;
-    mchar findtext[SIZE];
+    wchar findtext[MAXSIZE];
 
     SendMessage (hWnd_active, EM_GETSEL, (WPARAM)&start, (LPARAM)&stop);
     length = hWnd_get_text (&buffer, hWnd_active);
@@ -138,8 +138,8 @@ static bool find_next (HWND hWnd)
 static bool repl_next (HWND hWnd)
 {
     int start, stop, fsize, rsize;
-    mchar findtext[SIZE];
-    mchar repltext[SIZE];
+    wchar findtext[MAXSIZE];
+    wchar repltext[MAXSIZE];
 
     // get what is currently selected
     SendMessage (hWnd_active, EM_GETSEL, (WPARAM)&start, (LPARAM)&stop);
@@ -168,9 +168,9 @@ static bool repl_all (HWND hWnd)
 {
     int i, j, k;
     int length, fsize, rsize;
-    mchar findtext[SIZE];
-    mchar repltext[SIZE];
-    mchar* buffer2 = NULL;
+    wchar findtext[MAXSIZE];
+    wchar repltext[MAXSIZE];
+    wchar* buffer2 = NULL;
 
     if(!find_next(hWnd)) return FALSE;
 
@@ -273,9 +273,9 @@ static bool initialise_structure (HWND hWnd_dialog)
     SendMessage (hWnd_focused, EM_GETSEL, (WPARAM)&start, (LPARAM)&stop);
     if(start != stop)
     {
-        if(stop-start > SIZE)
+        if(stop-start > MAXSIZE)
         {
-            sprintf1((char*)buffer, "Selection length cannot be more than %d.", SIZE);
+            sprintf1((char*)buffer, "Selection length cannot be more than %d.", MAXSIZE);
             MessageBox(hWnd_focused, CST21((char*)buffer), L"Error", MB_OK);
             return FALSE;
         }

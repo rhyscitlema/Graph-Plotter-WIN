@@ -9,10 +9,10 @@
 #include <timer.h>
 
 
-void wait_for_user_first (const mchar* title, const mchar* message)
+void wait_for_user_first (const wchar* title, const wchar* message)
 { MessageBox (hWnd_main_window, message, title, MB_OK); }
 
-bool wait_for_confirmation (const mchar* title, const mchar* message)
+bool wait_for_confirmation (const wchar* title, const wchar* message)
 { return (MessageBox (hWnd_main_window, message, title, MB_OKCANCEL) == IDOK) ? true : false; }
 
 
@@ -33,9 +33,9 @@ static HWND get_hWnd_text (enum UI_ITEM ui_item)
 }
 
 
-void userinterface_set_text (enum UI_ITEM ui_item, const mchar* text)
+void userinterface_set_text (enum UI_ITEM ui_item, const wchar* text)
 {
-    const mchar* mstr;     
+    const wchar* mstr;     
     static bool check=false;
     HWND hWnd_text = get_hWnd_text(ui_item);
     if(hWnd_text == NULL) return;
@@ -58,9 +58,9 @@ void userinterface_set_text (enum UI_ITEM ui_item, const mchar* text)
 }
 
 
-static mchar* buffer = NULL;
+static wchar* buffer = NULL;
 
-const mchar* userinterface_get_text (enum UI_ITEM ui_item)
+const wchar* userinterface_get_text (enum UI_ITEM ui_item)
 {
     HWND hWnd_text = get_hWnd_text(ui_item);
     if(hWnd_text==NULL) return NULL;

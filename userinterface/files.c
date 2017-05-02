@@ -16,20 +16,20 @@
 
 
 
-static mchar file_name [MAX_FILE_NAME];
+static wchar file_name [MAX_FILE_NAME];
 static bool file_exists = false;
 
-const mchar* file_name_get() { return file_name; }
+const wchar* file_name_get() { return file_name; }
 bool file_exists_get() { return file_exists; }
 
 
 
-static mchar file_extension[10];
+static wchar file_extension[10];
 
-static void getFilter (const mchar* file_extension, const mchar** filter, int *filterIndex)
+static void getFilter (const wchar* file_extension, const wchar** filter, int *filterIndex)
 {
-    static const mchar* TEXT = L"Rhyscitlema Object Definition Text (*.rodt)\0*.rodt\0Math Function Expression Text (*.mfet)\0*.mfet\0Text File (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
-    static const mchar* IMAGE = L"Portable Network Graphics (*.png)\0*.png\0All Files (*.*)\0*.*\0";
+    static const wchar* TEXT = L"Rhyscitlema Object Definition Text (*.rodt)\0*.rodt\0Math Function Expression Text (*.mfet)\0*.mfet\0Text File (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
+    static const wchar* IMAGE = L"Portable Network Graphics (*.png)\0*.png\0All Files (*.*)\0*.*\0";
 
     int index =
         (0==strcmp21(file_extension, "rodt")) ? 1 :
@@ -59,9 +59,9 @@ static void getFilter (const mchar* file_extension, const mchar** filter, int *f
 
 static OPENFILENAME ofn;
 
-static void Browsefile (HWND hwnd, mchar* file_name, const mchar* file_extension)
+static void Browsefile (HWND hwnd, wchar* file_name, const wchar* file_extension)
 {
-    const mchar* filter;
+    const wchar* filter;
     int filterIndex;
     getFilter (file_extension, &filter, &filterIndex);
 
@@ -78,13 +78,13 @@ static void Browsefile (HWND hwnd, mchar* file_name, const mchar* file_extension
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOREADONLYRETURN;
 }
 
-static bool BrowseForOpenfile (HWND hWnd, mchar* file_name, const mchar* file_extension)
+static bool BrowseForOpenfile (HWND hWnd, wchar* file_name, const wchar* file_extension)
 {
     Browsefile(hWnd, file_name, file_extension);
     return GetOpenFileName(&ofn);
 }
 
-static bool BrowseForSavefile (HWND hWnd, mchar* file_name)
+static bool BrowseForSavefile (HWND hWnd, wchar* file_name)
 {
     Browsefile(hWnd, file_name, get_extension_from_name(NULL,file_name));
     ofn.Flags |= OFN_OVERWRITEPROMPT;
@@ -94,9 +94,9 @@ static bool BrowseForSavefile (HWND hWnd, mchar* file_name)
 
 
 // save entry text field in a file
-bool save_file_as (const mchar* fileName)
+bool save_file_as (const wchar* fileName)
 {
-    mchar filename [MAX_FILE_NAME];
+    wchar filename [MAX_FILE_NAME];
     HWND hWnd = hWnd_main_window;
 
     if(fileName==NULL)
@@ -132,11 +132,11 @@ bool save_file ()
 
 
 // open a file and load into entry text field
-bool open_file (const mchar* fileName)
+bool open_file (const wchar* fileName)
 {
     size_t i, size;
-    mchar* Content = NULL;
-    mchar filename [MAX_FILE_NAME];
+    wchar* Content = NULL;
+    wchar filename [MAX_FILE_NAME];
     HWND hWnd = hWnd_main_window;
 
     if(!check_save_changes()) return FALSE;
@@ -199,7 +199,7 @@ bool new_file ()
 // notify user if entry text field has been modified
 bool check_save_changes ()
 {
-    mchar temp[MAX_FILE_NAME];
+    wchar temp[MAX_FILE_NAME];
 
     if(!SendMessage (hWnd_main_text, EM_GETMODIFY, 0, 0))
         return TRUE; // no changes to save
@@ -218,7 +218,7 @@ bool check_save_changes ()
 
 
 
-static mchar* set_rodt_of_objects (mchar* str, List* list)
+static wchar* set_rodt_of_objects (wchar* str, List* list)
 {
     // go through the list of camera objects
     // start from list_tail() so to resolve
@@ -238,8 +238,8 @@ static mchar* set_rodt_of_objects (mchar* str, List* list)
 bool save_all_objects ()
 {
     #ifdef LIBRODT
-    mchar fileName[MAX_FILE_NAME];
-    mchar *str, *fileContent;
+    wchar fileName[MAX_FILE_NAME];
+    wchar *str, *fileContent;
     HWND hWnd = hWnd_main_window;
 
     if(surface_list->size==0 && camera_list->size==0)
@@ -283,7 +283,7 @@ void take_camera_picture ()
     static bool firsttime = true;
     ImageData imagedata;
     Camera* camera;
-    mchar filename[300];
+    wchar filename[300];
     Mouse* mouse = headMouse;
     HWND hWnd = hWnd_main_window;
 
@@ -308,12 +308,12 @@ void take_camera_picture ()
 
     if(write_image_file (CST12(filename), &imagedata))
     {
-        sprintf2(errormessage, CST21("Successfully saved %s."), get_name_from_path_name(NULL,filename));
+        sprintf2(errormessage, L"Successfully saved %s.", get_name_from_path_name(NULL,filename));
         display_message(errormessage);
     }
     else
     {
-        strcpy21 (errormessage, rwif_error_message);
+        strcpy21(errormessage, rwif_errormessage);
         display_message(errormessage);
         MessageBox(hWnd, errormessage, L"Error", MB_OK);
     }
