@@ -24,7 +24,7 @@ To compile on Windows with MinGW:
    Go onto the command line interface
    and execute: SET PATH=C:\MinGW\bin
 
-4) Go to ../read_write_image_file and compile
+4) Go to ..\read_write_image_file and compile
    as per the instructions provided there for
    compiling for the Microsoft Windows platform.
 
