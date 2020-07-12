@@ -41,12 +41,15 @@ message = "
  axes =  {1,0,0},{0,1,0},{0,0,1};
 
  origin =  movement +
-          {(0 := LHS - Key_Left + Key_Right),
-           (0 := LHS + Key_Up - Key_Down) , 0};
+          {(0 := clicked ? (LHS + Key_Right - Key_Left) : LHS),
+           (0 := clicked ? (LHS + Key_Up    - Key_Down) : LHS), 0};
 
+ private clicked = this==FocusedObject;
  private D = CameraDistance / PixelsPUL;
- enclosed movement = (0,0,0) := LHS + ((this==FocusedObject) ?
-            (FocusedCamera.axes^T * (MouseMotion .* (D, D, 1))) : (0,0,0));
+
+ enclosed movement = (0,0,0) := try(
+                    LHS + clicked * FocusedCamera.axes^T
+                    * (MouseMotion .* (D, D, 1)) , LHS);
 
  function(x,y,z) =  x^2 + y^2 + z^2 - bdr^2 ;
  colour(x,y,z)   =  cabs( x/bdr, y/bdr, z/bdr, 1 ) ;
@@ -59,7 +62,7 @@ message = "
  name =  "Graph1" ;
  file = "|file.rfet" ;
 
- origin =  movement + position(0,0,6);
+ origin =  position(0,0,6);
  axes   =  file.Turn(x_axis, (0,1,0), (0,1,0), turnAngle);
 
  private  movement  = ((0,0,0) := file.moveObject(this, LHS));

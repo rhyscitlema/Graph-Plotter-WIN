@@ -237,10 +237,12 @@ static void load_launched_file ()
     {
         #ifdef LIBRODT
         display_main_text(
-           L"\r\n To get started:\r\n"
+           L"1+1\r\n"
+            "\r\n#{ To get started:\r\n"
             "\r\n Drag-and-drop a .rfet or .rodt file to open it, or,\r\n"
             "\r\n Launch the software from a .rfet or .rodt file, or,\r\n"
-            "\r\n Go to Menu -> File -> Open... then do Evaluate (=).\r\n");
+            "\r\n Go to Menu -> File -> Open... then do Evaluate (=).\r\n"
+            "}#");
         #endif
     }
     #ifdef LIBRODT
