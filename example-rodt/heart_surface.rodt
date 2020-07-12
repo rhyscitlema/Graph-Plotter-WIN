@@ -1,0 +1,54 @@
+0;
+
+type = "Rhyscitlema_Objects_Definition_Text" ;
+
+
+\rfet{0;
+ type =  "Camera" ;
+ name =  "Camera0" ;
+ file = "|file.rfet" ;
+
+ origin =  movement + {0, -200, 0} ;
+
+ axes = file.Turn((1,0,0), (0,0,-1), (0,0,1), turnAngle);
+
+ rectangle = (100, 100, 400, 300, 0 ,0) := LHS + CameraResize ;
+
+ zoom =  0.5 := file.zoomCamera(PATH,LHS) ;
+
+ private movement  = (0,0,0) := file.moveCamera(PATH,LHS) ;
+ private turnAngle = (0,0,0) := file.turnCamera(PATH,LHS) ;
+}
+
+
+\rfet{0;
+ type =  "Surface" ;
+ name =  "Graph0" ;
+ file = "|file.rfet" ;
+
+ origin =  movement +
+          {(0 := LHS - Key_Left + Key_Right),
+           (0 := LHS + Key_Up - Key_Down) , 0};
+
+ axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
+
+ function(x,y,z) = heart(x/c, y/c, z/c) ;
+
+ private heart(x,y,z) =
+        (x^2 + (9/4)*y^2 + z^2 - 1)^3
+        - (x^2 + (9/80)*y^2) * z^3;
+
+ colour(x,y,z) = (0, 0, 1-cabs(f(x*z)), 1) ;
+
+ private f(n) = (toint(n) mod toint(4bdr)) / 4bdr;
+
+ boundary =  {-bdr, bdr, -bdr, bdr, -bdr, bdr} ;
+
+ bdr = 1.3*c;
+ c = 20;
+
+ accuracy =  10 ;
+
+ movement  =  (0,0,0) := file.moveObject(PATH,LHS) ;
+ turnAngle = ((0,0,0) := file.turnObject(PATH,LHS))+(0,0,4time);
+}
