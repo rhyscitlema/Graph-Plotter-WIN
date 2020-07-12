@@ -9,6 +9,8 @@
 */
 
 #include "font.h"
+#include <tools.h>
+#include <_stdio.h>
 
 static HFONT hFont;
 static LOGFONT logFont;
@@ -98,31 +100,24 @@ static const wchar* buffer = NULL;
 static bool get_text (HWND hWnd)
 {
 	SendMessage (hWnd_focused, EM_GETSEL, (WPARAM)&start, (LPARAM)&stop);
-	if(start==stop) { MessageBox (hWnd, L"No text selected." , L"Error", MB_OK); return false; }
+	if(start==stop) { user_alert(L"Error", L"No text selected."); return false; }
 	buffer = hWnd_get_text(hWnd_focused);
 	strcpy22S(WCHAR(buffer), buffer+start, stop-start);
 	return true;
 }
 
-static bool replace_text (HWND hWnd, value (*CALL) (value v))
+bool convert_text (HWND hWnd, int ID)
 {
 	if(!get_text(hWnd)) return false;
-	uint32_t stack[100000];
-	CALL(setStr22(stack, buffer));
-	const wchar* text = getStr2(vGet(stack));
-	SendMessage (hWnd_focused, EM_REPLACESEL, true, (LPARAM)text);
-	SendMessage (hWnd_focused, EM_SETSEL, start, start+strlen2(text));
+	const_value n = tools_convert_text(buffer, ID);
+	if(!n) return false;
+	if(isStr2(n))
+	{
+		const wchar* text = getStr2(n);
+		uint32_t length = strlen2(text);
+		SendMessage (hWnd_focused, EM_REPLACESEL, true, (LPARAM)text);
+		SendMessage (hWnd_focused, EM_SETSEL, start, start + length);
+	}
 	return true;
 }
 
-bool font_pcn_to_chr (HWND hWnd) { return replace_text(hWnd, pcn_to_chr); }
-bool font_chr_to_pcn (HWND hWnd) { return replace_text(hWnd, chr_to_pcn); }
-bool font_chr_to_fcn (HWND hWnd) { return replace_text(hWnd, chr_to_fcn); }
-bool font_set_pif_cn (HWND hWnd)
-{
-	if(!get_text(hWnd)) return false;
-	uint32_t stack[100000];
-	if(!VERROR(set_pif_cn(setStr22(stack, buffer)))) return true;
-	MessageBox (hWnd, getMessage(vGet(stack)), L"Error", MB_OK);
-	return false;
-}

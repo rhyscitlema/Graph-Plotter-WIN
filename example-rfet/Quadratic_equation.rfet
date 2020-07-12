@@ -9,4 +9,4 @@
  a = 2;  b = -2;  c = 1;
 
  # Solving for x where f(x) = 0.
- # Change the coefficients: a, b and c
+ # Change the coefficients a, b and c

@@ -28,10 +28,10 @@ message = "
 
  rectangle = (100, 100, 800, 600, 0 ,0) := LHS + CameraResize ;
 
- zoom =  1 := file.zoomCamera(this, LHS) ;
+ zoom =  1 := file.zoomCamera(PATH,LHS) ;
 
- private movement  = ((0,0,0) := file.moveCamera(this, LHS));
- private turnAngle = ((0,0,0) := file.turnCamera(this, LHS));
+ private movement  = ((0,0,0) := file.moveCamera(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(PATH,LHS));
 }
 
 \rfet{ width, height ;
@@ -44,8 +44,8 @@ message = "
 
  axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
 
- private  movement  =  (0,0,0) := file.moveObject(this, LHS) ;
- enclosed turnAngle =  (0,0,0) := file.turnObject(this, LHS) ;
+ private  movement  =  (0,0,0) := file.moveObject(PATH,LHS) ;
+ enclosed turnAngle =  (0,0,0) := file.turnObject(PATH,LHS) ;
 
  enclosed bdy = 8 ;
  enclosed bdx = bdy ;
@@ -69,8 +69,8 @@ message = "
 
  origin = movement + {0,-8.3,0};
 
- private movement  =  (0,0,0) := file.moveObject(this, LHS) ;
- replace turnAngle =  (0,0,0) := file.turnObject(this, LHS) ;
+ private movement  =  (0,0,0) := file.moveObject(PATH,LHS) ;
+ replace turnAngle =  (0,0,0) := file.turnObject(PATH,LHS) ;
 
  replace bdx = bdy * width/height ;
 }

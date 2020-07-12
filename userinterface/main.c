@@ -180,6 +180,26 @@ static void SetStatusBar (HWND hWnd_text)
 	SendMessage(hWnd_status_bar, WM_SETTEXT, 0, (LPARAM)str);
 }
 
+static void settabstop (unsigned int tabstop)
+{
+	CheckMenuRadioItem(
+		GetMenu(hWnd_main_window),
+		IDM_TABSTOP_0,
+		IDM_TABSTOP_16,
+		IDM_TABSTOP_0 + tabstop,
+		MF_BYCOMMAND);
+	tabstop *= 4;
+	SendMessage(hWnd_main_text, EM_SETTABSTOPS, 1, (LPARAM)&tabstop);
+}
+
+bool setMenuItemTextOfConvertText (int item, const wchar* text)
+{
+	HMENU hMenu = GetMenu (hWnd_main_window);
+	int flags = (item & 0x80) ? MF_GRAYED : 0;
+	item = (item & ~0x80) + IDM_CONVERT_0; // menu item to change
+	return ModifyMenu(hMenu, item, flags, item, text);
+}
+
 
 
 /* get next command line argument */
@@ -241,7 +261,7 @@ static void load_launched_file ()
 			"\r\n Drag-and-drop a .rfet or .rodt file to open it, or,\r\n"
 			"\r\n Launch the software from a .rfet or .rodt file, or,\r\n"
 			"\r\n Go to Menu -> File -> Open... then do Evaluate (=).\r\n"
-			"}#\r\n");
+			"}#");
 		#endif
 	}
 	#ifdef LIBRODT
@@ -464,7 +484,8 @@ static LRESULT CALLBACK MainWndProc (HWND hWnd, UINT message, WPARAM wParam, LPA
 		else if(hMenu == GetSubMenu(hMenu_main, 3)) // if Menu->Tools
 		{
 			#ifdef LIBRODT
-			UINT choice = (camera_list()->size==0 && surface_list()->size==0) ? MF_GRAYED : MF_ENABLED;
+			UINT choice = (camera_list()->size==0
+			            && surface_list()->size==0) ? MF_GRAYED : MF_ENABLED;
 			EnableMenuItem(hMenu, IDM_SAVEALLOBJECTS, choice);
 			EnableMenuItem(hMenu, IDM_REMOVEALLOBJECTS, choice);
 			#endif
@@ -503,13 +524,20 @@ static LRESULT CALLBACK MainWndProc (HWND hWnd, UINT message, WPARAM wParam, LPA
 			case IDM_PASTE:         SendMessage (hWnd_focused, WM_PASTE , 0, 0); break;
 			case IDM_DELETE:        SendMessage (hWnd_focused, WM_CLEAR , 0, 0); break;
 			case IDM_SELECTALL:     SendMessage (hWnd_focused, EM_SETSEL, 0,-1); break;
-			case IDM_PCN_TO_CHR:    font_pcn_to_chr(hWnd); break;
-			case IDM_CHR_TO_PCN:    font_chr_to_pcn(hWnd); break;
-			case IDM_CHR_TO_FCN:    font_chr_to_fcn(hWnd); break;
-			case IDM_SET_PIF_CN:    font_set_pif_cn(hWnd); break;
 			case IDM_FIND:          find_dialog_box(); break;
 			case IDM_REPLACE:       repl_dialog_box(); break;
 			case IDM_GOTO:          goto_dialog_box(hWnd); break;
+
+			case IDM_CONVERT_0:     convert_text(hWnd,0); break;
+			case IDM_CONVERT_1:     convert_text(hWnd,1); break;
+			case IDM_CONVERT_2:     convert_text(hWnd,2); break;
+			case IDM_CONVERT_3:     convert_text(hWnd,3); break;
+			case IDM_CONVERT_4:     convert_text(hWnd,4); break;
+			case IDM_CONVERT_5:     convert_text(hWnd,5); break;
+			case IDM_CONVERT_6:     convert_text(hWnd,6); break;
+			case IDM_CONVERT_7:     convert_text(hWnd,7); break;
+			case IDM_CONVERT_8:     convert_text(hWnd,8); break;
+			case IDM_CONVERT_9:     convert_text(hWnd,9); break;
 
 			// 3) For View Menu
 			case IDM_FULLSCREEN:    if(wPlacement.showCmd==SW_MAXIMIZE)
@@ -518,6 +546,16 @@ static LRESULT CALLBACK MainWndProc (HWND hWnd, UINT message, WPARAM wParam, LPA
 			                        break;
 
 			case IDM_FONT:          font_dialog_box(hWnd); break;
+
+			case IDM_TABSTOP_0:     settabstop(0); break;
+			case IDM_TABSTOP_1:     settabstop(1); break;
+			case IDM_TABSTOP_2:     settabstop(2); break;
+			case IDM_TABSTOP_3:     settabstop(3); break;
+			case IDM_TABSTOP_4:     settabstop(4); break;
+			case IDM_TABSTOP_6:     settabstop(6); break;
+			case IDM_TABSTOP_8:     settabstop(8); break;
+			case IDM_TABSTOP_12:    settabstop(12); break;
+			case IDM_TABSTOP_16:    settabstop(16); break;
 
 			// 4) For Tool Menu
 			#ifdef LIBRODT
@@ -559,13 +597,16 @@ static LRESULT CALLBACK MainWndProc (HWND hWnd, UINT message, WPARAM wParam, LPA
 		break;
 
 	case WM_CREATE:
-		hMenu = GetSubMenu(GetSubMenu(GetMenu(hWnd), 2), 1); // get Menu->View->keypad
+		hMenu = GetMenu(hWnd);
 		CheckMenuRadioItem(hMenu, IDM_STANDARD, IDM_VIEW_NONE, IDM_VIEW_NONE, MF_BYCOMMAND);
 
 		tools_init(10000000,NULL);
 
 		main_window_create(hWnd);
 		hWnd_main_window = hWnd;
+
+		settabstop(4);
+		SendMessage(hWnd_main_text, EM_SETLIMITTEXT, 1<<20, 0);
 
 		hWnd_focused = hWnd_main_text;
 		SetFocus(hWnd_focused);

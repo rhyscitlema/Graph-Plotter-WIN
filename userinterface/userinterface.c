@@ -8,12 +8,21 @@
 #include <userinterface.h>
 #include <timer.h>
 
+static wchar* buffer = NULL;
 
-void wait_for_user_first (const wchar* title, const wchar* message)
+
+void user_alert (const wchar* title, const wchar* message)
 { MessageBox(hWnd_main_window, message, title, MB_OK); }
 
-bool wait_for_confirmation (const wchar* title, const wchar* message)
+bool user_confirm (const wchar* title, const wchar* message)
 { return MessageBox(hWnd_main_window, message, title, MB_OKCANCEL) == IDOK; }
+
+const wchar* user_prompt (const wchar* title, const wchar* message, const wchar* entry)
+{
+	buffer = wchar_alloc (buffer, 100000);
+	strcpy22(buffer, entry);
+	return buffer;
+}
 
 
 static HWND get_hWnd_text (enum UI_ITEM ui_item)
@@ -64,13 +73,15 @@ const wchar* userinterface_get_text (enum UI_ITEM ui_item)
 	return hWnd_get_text(hWnd_text);
 }
 
-void userinterface_clean () { hWnd_get_text(NULL); }
+void userinterface_clean ()
+{
+	buffer = wchar_free(buffer);
+}
 
 
 const wchar* hWnd_get_text (HWND hWnd)
 {
-	static wchar* buffer = NULL;
-	if(!hWnd) { buffer = wchar_free(buffer); return NULL; }
+	if(!hWnd) return NULL;
 	int length = 1+(int)SendMessage(hWnd, WM_GETTEXTLENGTH, 0, 0);
 	buffer = wchar_alloc (buffer, length);
 	SendMessage(hWnd, WM_GETTEXT, length+1, (LPARAM)buffer);

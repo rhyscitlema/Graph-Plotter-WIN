@@ -30,10 +30,10 @@ message = "
 
  rectangle = (100, 100, 400, 300, 0 ,0) := LHS + CameraResize ;
 
- zoom =  0.5 := file.zoomCamera(this, LHS) ;
+ zoom =  0.5 := file.zoomCamera(PATH,LHS) ;
 
- private movement  = (0,0,0) := file.moveCamera(this, LHS) ;
- private turnAngle = (0,0,0) := file.turnCamera(this, LHS) ;
+ private movement  = (0,0,0) := file.moveCamera(PATH,LHS) ;
+ private turnAngle = (0,0,0) := file.turnCamera(PATH,LHS) ;
 }
 
 \rfet{0;
@@ -53,8 +53,8 @@ message = "
 
  accuracy = 20 ;   X=6; Y=X; Z=X;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 
  turn(angle) = file.Turn((1,0,0), (0,1,0), (0,0,1), angle);
 
@@ -77,8 +77,8 @@ message = "
 
  accuracy =  20 ;   X=8; Y=X; Z=2;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -97,8 +97,8 @@ message = "
 
  accuracy =  20 ;   X=9; Y=X; Z=4;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -119,8 +119,8 @@ message = "
 
  accuracy =  10 ;   X=5; Y=X; Z=5;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -139,8 +139,8 @@ message = "
 
  accuracy =  20 ;   X=8; Y=X; Z=3;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -159,8 +159,8 @@ message = "
 
  accuracy =  20 ;   X=8; Y=X; Z=X;
 
- private movement  = (0,0,0) := file.moveObject(this, LHS) ;
- private turnAngle = (0,0,0) := file.turnObject(this, LHS) ;
+ private movement  = (0,0,0) := file.moveObject(PATH,LHS) ;
+ private turnAngle = (0,0,0) := file.turnObject(PATH,LHS) ;
 }
 
 \rfet{0;
@@ -180,8 +180,8 @@ message = "
 
  accuracy =  20 ;   X=8; Y=X; Z=2;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -200,8 +200,8 @@ message = "
 
  accuracy =  20 ;   X=8; Y=X; Z=4;
 
- private movement  = (0,0,0) := file.moveObject(this, LHS) ;
- private turnAngle = (0,0,0) := file.turnObject(this, LHS) ;
+ private movement  = (0,0,0) := file.moveObject(PATH,LHS) ;
+ private turnAngle = (0,0,0) := file.turnObject(PATH,LHS) ;
 }
 
 \rfet{0;
@@ -220,8 +220,8 @@ message = "
 
  accuracy =  20 ;   bdr=8;  Z=3;
 
- private movement  = (0,0,0) := file.moveObject(this, LHS) ;
- private turnAngle = (0,0,0) := file.turnObject(this, LHS) ;
+ private movement  = (0,0,0) := file.moveObject(PATH,LHS) ;
+ private turnAngle = (0,0,0) := file.turnObject(PATH,LHS) ;
 }
 
 \rfet{0;
@@ -240,8 +240,8 @@ message = "
 
  accuracy = 20 ;   X=8; Y=X; Z=3;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -262,8 +262,8 @@ message = "
 
  accuracy =  20 ;   bdr=8;  Z=1;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -284,8 +284,8 @@ message = "
 
  accuracy =  20 ;   bdr=8;  Z=3;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -304,8 +304,8 @@ message = "
 
  accuracy =  10 ;   X=6; Y=X; Z=X;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -326,7 +326,7 @@ message = "
 
  accuracy =  10 ;   X=8; Y=X; Z=6;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 

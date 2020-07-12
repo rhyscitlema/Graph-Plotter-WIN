@@ -1,6 +1,26 @@
+s; s =
              x ,  # print in default base 10
- tostr(0b10, x),  # print in given   base 2
- tostr(0o10, x),  # print in given   base 8
- tostr(0x10, x);  # print in given   base 16
+ tostr("%b", x),  # print in given   base 2
+ tostr("%o", x),  # print in given   base 8
+ tostr("%x", x);  # print in given   base 16
 
 x = (10, 0b10, 0o10, 0x10); # x is a vector
+
+
+#--------------------
+# Also try the below
+#--------------------
+
+s2 = tostr("%d | %b | %o | %x", 10, 2, 8, 16);
+
+# evaluating s2 gives: 10 | 0b10 | 0o10 | 0x10
+
+
+s3 = tostr("%|1b, %|2b, %|1x, %|2x", 10, 16);
+
+# evaluating s3 gives: 0b1010, 0b10000, 0xa, 0x10
+
+
+# See user guide for more about the tostr() function,
+# at http://rhyscitlema.com/applications/calculator
+

@@ -42,25 +42,49 @@
 #define IDM_PASTE                       30104
 #define IDM_DELETE                      30105
 #define IDM_SELECTALL                   30106
-#define IDM_PCN_TO_CHR                  30107
-#define IDM_CHR_TO_PCN                  30108
-#define IDM_CHR_TO_FCN                  30109
-#define IDM_SET_PIF_CN                  30110
-#define IDM_CONVERT_TEXT                30111
-#define IDM_FIND                        30112
-#define IDM_REPLACE                     30113
-#define IDM_GOTO                        30114
+#define IDM_CONVERT_TEXT                30107
+#define IDM_FIND                        30108
+#define IDM_REPLACE                     30109
+#define IDM_GOTO                        30110
+
+#define IDM_CONVERT_0                   30150
+#define IDM_CONVERT_1                   30151
+#define IDM_CONVERT_2                   30152
+#define IDM_CONVERT_3                   30153
+#define IDM_CONVERT_4                   30154
+#define IDM_CONVERT_5                   30155
+#define IDM_CONVERT_6                   30156
+#define IDM_CONVERT_7                   30157
+#define IDM_CONVERT_8                   30158
+#define IDM_CONVERT_9                   30159
+#define IDM_CONVERT_10                  30160
+#define IDM_CONVERT_11                  30161
+#define IDM_CONVERT_12                  30162
+#define IDM_CONVERT_13                  30163
+#define IDM_CONVERT_14                  30164
+#define IDM_CONVERT_15                  30165
 
 #define IDM_FULLSCREEN                  30200
-#define IDM_STANDARD                    30201
-#define IDM_SCIENTIFIC                  30202
-#define IDM_STATISTICS                  30203
-#define IDM_PROGRAMMING                 30204
-#define IDM_BASIC_TEXT                  30205
-#define IDM_UNICODE_TEXT                30206
-#define IDM_RTEF_TEXT                   30207
-#define IDM_VIEW_NONE                   30208
-#define IDM_FONT                        30209
+#define IDM_FONT                        30201
+
+#define IDM_STANDARD                    30202
+#define IDM_SCIENTIFIC                  30203
+#define IDM_STATISTICS                  30204
+#define IDM_PROGRAMMING                 30205
+#define IDM_BASIC_TEXT                  30206
+#define IDM_UNICODE_TEXT                30207
+#define IDM_RTEF_TEXT                   30208
+#define IDM_VIEW_NONE                   30209
+
+#define IDM_TABSTOP_0                   30210
+#define IDM_TABSTOP_1                   30211
+#define IDM_TABSTOP_2                   30212
+#define IDM_TABSTOP_3                   30213
+#define IDM_TABSTOP_4                   30214
+#define IDM_TABSTOP_6                   30216
+#define IDM_TABSTOP_8                   30218
+#define IDM_TABSTOP_12                  30222
+#define IDM_TABSTOP_16                  30226
 
 #define IDM_TAKE_PICTURE                30300
 #define IDM_SAVEALLOBJECTS              30301

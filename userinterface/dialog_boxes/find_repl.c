@@ -97,7 +97,7 @@ static bool find_next (HWND hWnd)
 	length = strlen2(buffer);
 
 	GET_FIND_TEXT(hWnd);
-	pcn_to_chr(setStr22(stack, find_text));
+	PcnToChr(setStr22(stack, find_text));
 	findtext = getStr2(vGet(stack));
 	fsize = strlen2(findtext);
 
@@ -155,7 +155,7 @@ static bool repl_next (HWND hWnd)
 
 	// get the text to be found and replaced
 	GET_FIND_TEXT(hWnd);
-	value v = pcn_to_chr(setStr22(stack, find_text));
+	value v = PcnToChr(setStr22(stack, find_text));
 	findtext = getStr2(vGet(stack));
 	fsize = strlen2(findtext);
 
@@ -164,7 +164,7 @@ static bool repl_next (HWND hWnd)
 	{
 		// get the text to replace with
 		GET_REPL_TEXT(hWnd);
-		pcn_to_chr(setStr22(v, repl_text));
+		PcnToChr(setStr22(v, repl_text));
 		repltext = getStr2(vGet(v));
 		rsize = strlen2(repltext);
 		// finally do the replacement
@@ -185,12 +185,12 @@ static bool repl_all (HWND hWnd)
 	wchar* buffer2 = NULL;
 
 	if(!find_next(hWnd)) return false;
-	value v = pcn_to_chr(setStr22(stack, find_text));
+	value v = PcnToChr(setStr22(stack, find_text));
 	findtext = getStr2(vGet(stack));
 	fsize = strlen2(findtext);
 
 	GET_REPL_TEXT(hWnd);
-	pcn_to_chr(setStr22(v, repl_text));
+	PcnToChr(setStr22(v, repl_text));
 	repltext = getStr2(vGet(v));
 	rsize = strlen2(repltext);
 
@@ -211,8 +211,8 @@ static bool repl_all (HWND hWnd)
 	buffer2[j] = '\0';
 
 	//SendMessage (hWnd_active, WM_SETTEXT, 0, (LPARAM)buffer2);
-		SendMessage (hWnd_active, EM_SETSEL, 0, -1);
-		SendMessage (hWnd_active, EM_REPLACESEL, true, (LPARAM)buffer2);
+	SendMessage (hWnd_active, EM_SETSEL, 0, -1);
+	SendMessage (hWnd_active, EM_REPLACESEL, true, (LPARAM)buffer2);
 
 	wchar_free(buffer2);
 	return true;
@@ -297,7 +297,7 @@ static bool initialise_structure (HWND hWnd_dialog)
 		}
 		buffer = hWnd_get_text(hWnd_focused);
 		strcpy22S(WCHAR(buffer), buffer+start, stop-start);
-		chr_to_pcn(setStr22(stack, buffer));
+		ChrToPcn(setStr22(stack, buffer));
 		strcpy22(find_text, getStr2(vGet(stack)));
 	}
 

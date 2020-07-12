@@ -27,8 +27,8 @@ message = "
 
  axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
 
- private movement  =  (0,0,0) := file.moveObject(this, LHS) ;
- private turnAngle =  (0,0,0) := file.turnObject(this, LHS) ;
+ private movement  =  (0,0,0) := file.moveObject(PATH,LHS) ;
+ private turnAngle =  (0,0,0) := file.turnObject(PATH,LHS) ;
 
  private image = "image.jpeg";
  enclosed wh = GetImageWidthHeight(image) ;
@@ -60,13 +60,13 @@ message = "
  origin =  movement + {0,0,0} ;
  axes   = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
 
- private movement  = ((0,0,0) := file.moveCamera(this, LHS));
- private turnAngle = ((0,0,0) := file.turnCamera(this, LHS));
+ private movement  = ((0,0,0) := file.moveCamera(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(PATH,LHS));
 
  private wh = "Image1".wh ;
 
  rectangle = (100, 100, wh[0], wh[1], 0, 0) := LHS + CameraResize ;
 
- zoom =  1 := file.zoomCamera(this, LHS) ;
+ zoom =  1 := file.zoomCamera(PATH,LHS) ;
 }
 

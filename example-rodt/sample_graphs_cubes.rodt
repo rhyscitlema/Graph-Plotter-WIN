@@ -28,10 +28,10 @@ message = "
 
  rectangle = (100, 100, 400, 300, 0 ,0) := LHS + CameraResize ;
 
- zoom =  0.5 := file.zoomCamera(this, LHS) ;
+ zoom =  0.5 := file.zoomCamera(PATH,LHS) ;
 
- private movement  = ((0,0,0) := file.moveCamera(this, LHS));
- private turnAngle = ((0,0,0) := file.turnCamera(this, LHS));
+ private movement  = ((0,0,0) := file.moveCamera(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(PATH,LHS));
 
  private u = time*pi/12;
  private dst = 100;
@@ -54,8 +54,8 @@ message = "
 
  axes = file.Turn((0,-1,0), (0.7,0,0.7), (0,0,1), turnAngle + (0,0,4*time));
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 
  private bdr = 8 ;
  private k = bdr-1 ;
@@ -89,8 +89,8 @@ message = "
 
  axes = file.Turn((1,0,0), (0,1,0.1), (0,0,1), turnAngle);
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 
  private c = 1.01 + sin(u) ;
  private u = time*pi/2 ;
@@ -111,8 +111,8 @@ message = "
 
  axes = file.Turn((0.8, -0.6, 0), (0.4, 0.6, 0.7), (0,0,1), turnAngle);
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS)) + (0,0,4*time);
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS)) + (0,0,4*time);
 
  private bdx = 4 ;
  private bdy = bdx;
@@ -140,8 +140,8 @@ message = "
 
  accuracy =  1 ;   bdr=5; bdz=10;
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 }
 
 \rfet{0;
@@ -159,8 +159,8 @@ message = "
 
  axes = file.Turn((1,0,0), (0,1,0), (0,0,1), turnAngle);
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 
  function(x,y,z) =  0 ;
 
@@ -178,8 +178,8 @@ message = "
 
  axes = file.Turn((-d1, d0, 0), (d0, d1, 0), (0,0,1), turnAngle);
 
- private movement  = ((0,0,0) := file.moveObject(this, LHS));
- private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+ private movement  = ((0,0,0) := file.moveObject(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(PATH,LHS));
 
  function(x,y,z) =  0 ;
 

@@ -30,12 +30,12 @@ static bool mouse_input_event (HWND dw, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-static void draw_to_window (HDC hDC, const int* pixel_array, int width, int height)
+static void draw_to_window (HDC hDC, const uint32_t* pixelArray, int width, int height)
 {
 	int y;
 	BITMAPINFO bmi;
 
-	if(!hDC || !pixel_array) return;
+	if(!hDC || !pixelArray) return;
 
 	memset(&bmi, 0, sizeof(bmi));
 	bmi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
@@ -52,7 +52,7 @@ static void draw_to_window (HDC hDC, const int* pixel_array, int width, int heig
 			width, 1,
 			0,0,
 			0,width,
-			pixel_array + y*width,
+			pixelArray + y*width,
 			&bmi,
 			DIB_RGB_COLORS );
 
@@ -65,7 +65,7 @@ static void draw_to_window (HDC hDC, const int* pixel_array, int width, int heig
 		width, height,
 		0,0,
 		0,width,
-		pixel_array,
+		pixelArray,
 		&bmi,
 		DIB_RGB_COLORS );*/
 }
