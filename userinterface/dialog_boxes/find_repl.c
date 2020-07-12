@@ -179,7 +179,7 @@ static bool repl_all (HWND hWnd)
     strcpy22(findtext, pcn_to_chr_22(0,find_text)); fsize = strlen2(findtext);
 
     length = strlen2(buffer);
-    buffer2 = mchar_alloc (buffer2, 2*length);
+    buffer2 = wchar_alloc (buffer2, 2*length);
 
     j=0; i=0;
     while(i < length)
@@ -198,7 +198,7 @@ static bool repl_all (HWND hWnd)
         SendMessage (hWnd_active, EM_SETSEL, 0, -1);
         SendMessage (hWnd_active, EM_REPLACESEL, TRUE, (LPARAM)buffer2);
 
-    mchar_free(buffer2);
+    wchar_free(buffer2);
     return TRUE;
 }
 

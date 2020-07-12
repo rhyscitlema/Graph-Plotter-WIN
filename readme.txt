@@ -11,7 +11,7 @@ To compile on Windows with MinGW:
 1) First get the folders:
     * ../algorithms
     * ../lib_std
-    * ../libmfet
+    * ../librfet
     * ../librodt
     * ../read_write_image_file
 

@@ -51,7 +51,7 @@ static inline int hWnd_get_text (wchar** buffer_ptr, HWND hWnd)
     int length;
     if(buffer_ptr==NULL) return 0;
     length = 1+(int)SendMessage(hWnd, WM_GETTEXTLENGTH, 0, 0);
-    *buffer_ptr = mchar_alloc (*buffer_ptr, length);
+    *buffer_ptr = wchar_alloc (*buffer_ptr, length);
     SendMessage(hWnd, WM_GETTEXT, length+1, (LPARAM)(*buffer_ptr));
     (*buffer_ptr)[length]=0;
     return length;

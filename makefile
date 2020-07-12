@@ -2,7 +2,7 @@
 # Explanation of file structure available at:
 # http://rhyscitlema.com/applications/makefile.html
 
-CALC_OUT_FILE = MFET_Calculator.exe
+CALC_OUT_FILE = RFET_Calculator.exe
 
 GP3D_OUT_FILE = GraphPlotter3D.exe
 
@@ -24,7 +24,7 @@ GP3D_OBJ_FILES = $(CALC_OBJ_FILES) \
 
 LIBALGO = ../algorithms
 LIB_STD = ../lib_std
-LIBMFET = ../libmfet
+LIBRFET = ../librfet
 LIBRODT = ../librodt
 LIBRWIF = ../read_write_image_file
 
@@ -45,7 +45,7 @@ WINDRES = windres.exe
 CC_FLAGS = -I$(MinGW)/include \
            -I$(LIBALGO) \
            -I$(LIB_STD) \
-           -I$(LIBMFET) \
+           -I$(LIBRFET) \
            -I$(LIBRODT) \
            -I$(LIBRWIF) \
            -Wall \
@@ -55,7 +55,7 @@ CC_FLAGS = -I$(MinGW)/include \
 # linker flags
 LD_FLAGS = -L$(LIBALGO) \
            -L$(LIB_STD) \
-           -L$(LIBMFET) \
+           -L$(LIBRFET) \
            -L$(LIBRODT) \
            -L$(LIBRWIF) \
            -L$(MinGW)/lib \
@@ -64,10 +64,10 @@ LD_FLAGS = -L$(LIBALGO) \
 # needed linker libs.
 # note: the order below matters
 CALC_LD_LIBS = -luidt \
-               -lmfet \
+               -lrfet \
                -l_std \
                -lalgo \
-                -mwindows \
+               -mwindows \
                $(LDLIBS)
 
 GP3D_LD_LIBS = -luidt \
@@ -81,7 +81,7 @@ gp3d:
 	$(MAKE) gp3d_objs CFLAGS+="-DLIBRODT" WD_FLAGS="-DLIBRODT"
 	cd $(LIBALGO) && $(MAKE) CFLAGS+="-DLIB_STD -I$(LIB_STD)"
 	cd $(LIB_STD) && $(MAKE) CFLAGS+="-DCOMPLEX"
-	cd $(LIBMFET) && $(MAKE)
+	cd $(LIBRFET) && $(MAKE)
 	cd $(LIBRODT) && $(MAKE)
 	cd $(LIBRWIF) && $(MAKE) lib
 	$(LD) $(GP3D_OBJ_FILES) $(LD_FLAGS) $(GP3D_LD_LIBS) -o $(GP3D_OUT_FILE)
@@ -91,7 +91,7 @@ gp3d_objs: $(GP3D_OBJ_FILES)
 calc: $(CALC_OBJ_FILES)
 	cd $(LIBALGO) && $(MAKE) CFLAGS+="-DLIB_STD -I$(LIB_STD)"
 	cd $(LIB_STD) && $(MAKE) CFLAGS+="-DCOMPLEX"
-	cd $(LIBMFET) && $(MAKE)
+	cd $(LIBRFET) && $(MAKE)
 	cd $(LIBRODT) && $(MAKE) uidt
 	$(LD) $(CALC_OBJ_FILES) $(LD_FLAGS) $(CALC_LD_LIBS) -o $(CALC_OUT_FILE)
 
@@ -99,7 +99,7 @@ calc: $(CALC_OBJ_FILES)
 clean:
 	cd $(LIBALGO) && $(MAKE) clean
 	cd $(LIB_STD) && $(MAKE) clean
-	cd $(LIBMFET) && $(MAKE) clean
+	cd $(LIBRFET) && $(MAKE) clean
 	cd $(LIBRODT) && $(MAKE) clean
 	cd $(LIBRWIF) && $(MAKE) clean
 	$(RM) $(GP3D_OBJ_FILES) $(CALC_OUT_FILE) $(GP3D_OUT_FILE)
@@ -108,7 +108,7 @@ clean:
 
 INCLUDE_FILES = $(LIBALGO)/*.h \
                 $(LIB_STD)/*.h \
-                $(LIBMFET)/*.h \
+                $(LIBRFET)/*.h \
                 $(LIBRODT)/*.h
 
 # compile .c files to .o files

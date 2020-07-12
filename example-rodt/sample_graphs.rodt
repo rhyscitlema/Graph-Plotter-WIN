@@ -17,10 +17,10 @@ message = "
 
 ";
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Camera 20" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  position + movement ;
 
@@ -39,10 +39,10 @@ message = "
  private direction = ( -sin(u), cos(u), 0 );
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Camera 21" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  {0,0,0} + movement ;
  axes = file.Turn((1,0,0), (0,0,-1), (0,0,1), turnAngle);
@@ -55,14 +55,14 @@ message = "
 }
 
 
-\mfet{0;
+\rfet{0;
  type = "Surface" ;
  name = "Surface" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
  boundary = {0,0,0,0,0,0};
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 21" ;
 
@@ -97,7 +97,7 @@ message = "
  accuracy =  1 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 22" ;
 
@@ -120,7 +120,7 @@ message = "
  accuracy =  8 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 23" ;
 
@@ -141,7 +141,7 @@ message = "
  accuracy =  10 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 24" ;
 
@@ -164,7 +164,7 @@ message = "
  # significantly reduce the speed of execution.
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 25" ;
 
@@ -190,7 +190,7 @@ message = "
  accuracy =  4 ;    bdr = 4 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 26" ;
 

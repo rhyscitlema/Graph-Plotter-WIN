@@ -5,7 +5,7 @@
 #include <mouse.h>
 
 
-static int WINAPI_KEY_TO_MFET_KEY (int KEY)
+static int WINAPI_KEY_TO_RFET_KEY (int KEY)
 {
     if(('0'<=KEY && KEY<='9')
     || ('A'<=KEY && KEY<='Z')
@@ -66,7 +66,7 @@ static int WINAPI_KEY_TO_MFET_KEY (int KEY)
 
 bool keyboard_input_event (HWND dw, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    int key = WINAPI_KEY_TO_MFET_KEY((int)wParam);
+    int key = WINAPI_KEY_TO_RFET_KEY((int)wParam);
     bool pressed = message == WM_KEYDOWN;
     return on_key_event(key, pressed);
 }

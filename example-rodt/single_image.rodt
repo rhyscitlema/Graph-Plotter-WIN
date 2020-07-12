@@ -17,11 +17,11 @@ message = "
 
 ";
 
-\mfet{ width, height ;
+\rfet{ width, height ;
 
  type =  "Surface" ;
  name =  "Image1" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  movement + {0,0,0} ;
 
@@ -52,10 +52,10 @@ message = "
  accuracy =  1 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Camera";
  name =  "Camera1";
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  movement + {0,0,0} ;
  axes   = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);

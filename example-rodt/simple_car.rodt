@@ -18,10 +18,10 @@ message = "
 ";
 
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Camera0" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  movement + {0, 150, 600} ;
 
@@ -36,7 +36,7 @@ message = "
 }
 
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph0" ;
 
@@ -56,10 +56,10 @@ message = "
  accuracy        =  5 ;    bdr=4;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph1" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  movement + position(0,0,6);
  axes   =  file.Turn(x_axis, (0,1,0), (0,1,0), turnAngle);
@@ -84,7 +84,7 @@ message = "
 }
 
 
-\mfet{0;
+\rfet{0;
  type =  "Graph1" ;
  name =  "Graph2" ;
 
@@ -98,7 +98,7 @@ message = "
  accuracy        =  1 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph1" ;
  name =  "Graph3" ;
 
@@ -112,7 +112,7 @@ message = "
  accuracy        =  10 ;   bdr=5;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph3" ;
  name =  "Graph4" ;
 
@@ -121,7 +121,7 @@ message = "
  replace turnAngle = ((0,0,0) := file.turnObject(current)) - (0,0,t);
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph3" ;
  name =  "Graph5" ;
 
@@ -130,7 +130,7 @@ message = "
  replace turnAngle = ((0,0,0) := file.turnObject(current)) - (0.2,0,t);
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph3" ;
  name =  "Graph6" ;
 

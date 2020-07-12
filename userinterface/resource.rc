@@ -12,7 +12,7 @@
 #ifdef LIBRODT
 IDI_APP_ICON            ICON                   "icon_rodt.ico"
 #else
-IDI_APP_ICON            ICON                   "icon_mfet.ico"
+IDI_APP_ICON            ICON                   "icon_rfet.ico"
 #endif
 
 
@@ -100,7 +100,7 @@ BEGIN
         #ifdef LIBRODT
         MENUITEM "&About Rhyscitlema Graph Plotter 3D", IDM_ABOUT
         #else
-        MENUITEM "&About Rhyscitlema MFET Calculator", IDM_ABOUT
+        MENUITEM "&About Rhyscitlema RFET Calculator", IDM_ABOUT
         #endif
     END
 END
@@ -163,7 +163,7 @@ STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
 #ifdef LIBRODT
 CAPTION "About Rhyscitlema Graph Plotter 3D"
 #else
-CAPTION "About Rhyscitlema MFET Calculator"
+CAPTION "About Rhyscitlema RFET Calculator"
 #endif
 FONT 10, "Arial"
 BEGIN
@@ -171,7 +171,7 @@ BEGIN
     #ifdef LIBRODT
     LTEXT "Rhyscitlema Graph Plotter 3D"           , IDC_STATIC, 40,10,110,10
     #else
-    LTEXT "Rhyscitlema MFET Calculator"            , IDC_STATIC, 40,10,110,10
+    LTEXT "Rhyscitlema RFET Calculator"            , IDC_STATIC, 40,10,110,10
     #endif
     LTEXT "Version 1.0"                            , IDC_STATIC, 40,22,110,10
     LTEXT "Copyright (C) 2017"                     , IDC_STATIC, 40,34,110,10

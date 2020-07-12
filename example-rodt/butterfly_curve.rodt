@@ -17,10 +17,10 @@ message = "
 
 ";
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Camera 1" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  (0,0,30);
 
@@ -34,10 +34,10 @@ message = "
  private turnAngle = ((0,0,0) := file.turnCamera(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 1" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin = movement ;
 

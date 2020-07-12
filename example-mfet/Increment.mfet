@@ -1,7 +1,0 @@
- a , b;
- 
-a = (0 := current + 1) ;
-
-b = (0 := current + 2) ;
-
-# Evaluate again and again!

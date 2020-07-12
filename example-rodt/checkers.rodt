@@ -18,10 +18,10 @@ message = "
 ";
 
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Player 1 - Checkers" ;
- file = "|file.mfet";
+ file = "|file.rfet";
 
  origin =  movement + {0, 0, 600} ;
 
@@ -35,10 +35,10 @@ message = "
  private turnAngle = ((0,0,0) := file.turnCamera(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Player 2 - Checkers" ;
- file = "|file.mfet";
+ file = "|file.rfet";
 
  origin =  movement + {0, 0, 600} ;
 
@@ -53,10 +53,10 @@ message = "
 }
 
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Board" ;
- file = "|file.mfet";
+ file = "|file.rfet";
 
  origin =  movement;
 
@@ -79,7 +79,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Board" ;
  name =  "P100" ;
 
@@ -113,7 +113,7 @@ message = "
  private D = CameraDistance * PixelSize ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P200" ;
 
@@ -130,7 +130,7 @@ message = "
 }
 
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P120" ;
 
@@ -141,7 +141,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P140" ;
 
@@ -152,7 +152,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P160" ;
 
@@ -163,7 +163,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P111" ;
 
@@ -174,7 +174,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P131" ;
 
@@ -185,7 +185,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P151" ;
 
@@ -196,7 +196,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P171" ;
 
@@ -207,7 +207,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P102" ;
 
@@ -218,7 +218,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P122" ;
 
@@ -229,7 +229,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P142" ;
 
@@ -240,7 +240,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P100" ;
  name =  "P162" ;
 
@@ -252,7 +252,7 @@ message = "
 }
 
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P220" ;
 
@@ -263,7 +263,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P240" ;
 
@@ -274,7 +274,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P260" ;
 
@@ -285,7 +285,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P211" ;
 
@@ -296,7 +296,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P231" ;
 
@@ -307,7 +307,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P251" ;
 
@@ -318,7 +318,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P271" ;
 
@@ -329,7 +329,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P202" ;
 
@@ -340,7 +340,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P222" ;
 
@@ -351,7 +351,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P242" ;
 
@@ -362,7 +362,7 @@ message = "
  private turnAngle = ((0,0,0) := turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "P200" ;
  name =  "P262" ;
 

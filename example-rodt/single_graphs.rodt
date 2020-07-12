@@ -17,10 +17,10 @@ message = "
 
 ";
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Camera 1" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  private a =  floor(40*time) mod 400 ;
 
@@ -36,10 +36,10 @@ message = "
  private turnAngle = (0,0,0) := file.turnCamera(current) ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph0" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  {0,0,0} + movement ;
 
@@ -61,7 +61,7 @@ message = "
  abs(x) = cabs(x);
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph1" ;
 
@@ -81,7 +81,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph2" ;
 
@@ -101,7 +101,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph3" ;
 
@@ -123,7 +123,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph4" ;
 
@@ -143,7 +143,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph5" ;
 
@@ -163,7 +163,7 @@ message = "
  private turnAngle = (0,0,0) := file.turnObject(current) ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph6" ;
 
@@ -184,7 +184,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph6" ;
  name =  "Graph7" ;
 
@@ -204,7 +204,7 @@ message = "
  private turnAngle = (0,0,0) := file.turnObject(current) ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph8" ;
 
@@ -224,7 +224,7 @@ message = "
  private turnAngle = (0,0,0) := file.turnObject(current) ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph9" ;
 
@@ -244,7 +244,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph10" ;
 
@@ -266,7 +266,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph11" ;
 
@@ -288,7 +288,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph12" ;
 
@@ -308,7 +308,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph0" ;
  name =  "Graph13" ;
 

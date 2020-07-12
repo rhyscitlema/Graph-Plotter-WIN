@@ -17,10 +17,10 @@ message = "
 
 ";
 
-\mfet{0;
+\rfet{0;
  type =  "Camera";
  name =  "Camera 1";
- file = "|file.mfet";
+ file = "|file.rfet";
 
  origin =  movement + (0,0,-30);
 
@@ -34,11 +34,11 @@ message = "
  private turnAngle = ((0,0,0) := file.turnCamera(current));
 }
 
-\mfet{ width, height ;
+\rfet{ width, height ;
 
  type =  "Surface" ;
  name =  "Image 1" ;
- file = "|file.mfet";
+ file = "|file.rfet";
 
  origin = movement + {0,0,0};
 
@@ -62,11 +62,11 @@ message = "
  accuracy =  1 ;
 }
 
-\mfet{ width, height ;
+\rfet{ width, height ;
 
  type =  "Image 1" ;
  name =  "Image 2" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin = movement + {0,-8.3,0};
 

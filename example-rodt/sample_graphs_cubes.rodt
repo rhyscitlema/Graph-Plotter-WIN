@@ -17,10 +17,10 @@ message = "
 
 ";
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Camera 40" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
 
  origin =  position + movement ;
 
@@ -39,14 +39,14 @@ message = "
  private direction = ( -sin(u), cos(u), 0 );
 }
 
-\mfet{0;
+\rfet{0;
  type = "Surface" ;
  name = "Surface" ;
- file = "|file.mfet" ;
+ file = "|file.rfet" ;
  boundary = {0,0,0,0,0,0};
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 41" ;
 
@@ -81,7 +81,7 @@ message = "
  accuracy =  1 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Graph 41" ;
  name =  "Graph 42" ;
 
@@ -103,7 +103,7 @@ message = "
  accuracy =   1 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 43" ;
 
@@ -124,7 +124,7 @@ message = "
  accuracy =  1 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 44" ;
 
@@ -144,7 +144,7 @@ message = "
  private turnAngle = ((0,0,0) := file.turnObject(current));
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 45" ;
 
@@ -170,7 +170,7 @@ message = "
  accuracy =  1 ;    bdr = 4 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph 46" ;
 

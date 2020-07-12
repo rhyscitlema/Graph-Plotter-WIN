@@ -1,0 +1,37 @@
+".|file1.rfet".container1 ,
+".|file1.rfet".container2 ,
+".|file2.rfet".container3 ,
+".|file2.rfet".main ,
+".|file1.rfet".main ;
+
+\rfet{
+    1+1;
+    name = "file1.rfet";
+
+    \rfet{variable1;
+        name = "container1";
+        private variable1 = 10;
+        enclosed variable2 = 20;
+        protected variable3 = 30 + variable4;
+        public variable4 = 40;
+    }
+    \rfet{variable2, variable4;
+        type = "container1";
+        name = "container2";
+        public variable4 = 400;
+    }
+}
+
+\rfet{
+    2*f(3) ;
+    f(x) = 4x ;
+
+    type = "file1.rfet" ;
+    name = "file2.rfet" ;
+
+    \rfet{variable3 , "container2".variable3 ;
+        type = "container1" ;
+        name = "container3" ;
+        replace variable4 = 4000 ;
+    }
+}

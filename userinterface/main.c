@@ -21,14 +21,6 @@
 static TCHAR szTitle[100];        // The title bar text
 static TCHAR szWindowClass[100];  // Main window class name
 
-HMENU hMenu_main;
-HMENU hMenu_file;
-HMENU hMenu_edit;
-HMENU hMenu_view;
-HMENU hMenu_tool;
-HMENU hMenu_help;
-HMENU hMenu_keypad;
-
 static WINDOWPLACEMENT wPlacement;
 int main_window_width  = 600;
 int main_window_height = 500;
@@ -72,10 +64,6 @@ int WINAPI WinMain (HINSTANCE hInstance,
                     LPSTR     lpCmdLine,
                     int       nCmdShow)
 {
-    // Declare variables
-    MSG msg;
-    HACCEL hAccelTable;
-
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -87,12 +75,12 @@ int WINAPI WinMain (HINSTANCE hInstance,
     strcpy21 (szTitle, "Rhyscitlema Graph Plotter 3D");
     strcpy21 (szWindowClass, "Rhyscitlema Graph Plotter 3D - Software");
     #else
-    strcpy21 (szTitle, "Rhyscitlema MFET Calculator");
-    strcpy21 (szWindowClass, "Rhyscitlema MFET Calculator - Software");
+    strcpy21 (szTitle, "Rhyscitlema RFET Calculator");
+    strcpy21 (szWindowClass, "Rhyscitlema RFET Calculator - Software");
     #endif
 
     // Initialise accelerator table
-    hAccelTable = LoadAccelerators (hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR));
+    HACCEL hAccelTable = LoadAccelerators (hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR));
 
     // Initialise application main user interface
     if(!createMainWindow (hInstance, nCmdShow)) return false;
@@ -103,18 +91,19 @@ int WINAPI WinMain (HINSTANCE hInstance,
     // load launched file
     load_launched_file();
 
+    MSG msg;
     // Main message loop
     while(GetMessage(&msg, NULL, 0, 0))
     {
-        if( (!TranslateAccelerator(hWnd_main_window, hAccelTable, &msg))
-         && (!IsWindow(hWnd_find) || !IsDialogMessage(hWnd_find, &msg))
-         && (!IsWindow(hWnd_repl) || !IsDialogMessage(hWnd_repl, &msg)) )
+        if( !TranslateAccelerator(hWnd_main_window, hAccelTable, &msg)
+         && !(IsWindow(hWnd_find) && IsDialogMessage(hWnd_find, &msg))
+         && !(IsWindow(hWnd_repl) && IsDialogMessage(hWnd_repl, &msg)) )
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
     }
-    return (int) msg.wParam;
+    return (int)msg.wParam;
 }
 
 
@@ -154,8 +143,8 @@ static BOOL createMainWindow (HINSTANCE hInstance, int nCmdShow)
                     NULL, NULL, hInstance, NULL);
 
     if(!hWnd) return false;
-    ShowWindow (hWnd, nCmdShow);
-    UpdateWindow (hWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
     hWnd_main_window = hWnd;
 
     // Set length of Window Placement structure
@@ -168,7 +157,6 @@ static BOOL createMainWindow (HINSTANCE hInstance, int nCmdShow)
 bool SetWindowTitle (HWND hWnd, const TCHAR* fileName, bool fileExists)
 {
     TCHAR title[MAX_FILE_NAME];
-    EnableMenuItem(hMenu_file, IDM_RELOAD, (fileExists ? MF_ENABLED : MF_GRAYED));
     sprintf2(title, L"%s - %s ", get_name_from_path_name(NULL, fileName), szTitle);
     return SetWindowText(hWnd, title);
 }
@@ -198,7 +186,7 @@ static bool on_launch_or_drop_file (const wchar* fileName)
     get_path_from_path_name (default_file_path, fileName);
     extension = get_extension_from_name(NULL, fileName);
     if(0==strcmp21(extension, "rodt")
-    || 0==strcmp21(extension, "mfet"))
+    || 0==strcmp21(extension, "rfet"))
         tools_do_eval(get_name_from_path_name(NULL,fileName));
     return true;
 }
@@ -217,13 +205,13 @@ static void load_launched_file ()
         if(!argv || !argv[0]) break;
         on_launch_or_drop_file(argv);
     }
-    mchar_free(argv);
+    wchar_free(argv);
     if(i<=1)
     {
         #ifdef LIBRODT
         strcpy21(str, "\r\n To get started:\r\n");
-        strcat21(str, "\r\n Drag-and-drop to open an MFET or RODT File, or,\r\n");
-        strcat21(str, "\r\n Launch the software from an MFET or RODT file, or,\r\n");
+        strcat21(str, "\r\n Drag-and-drop to open an RFET or RODT File, or,\r\n");
+        strcat21(str, "\r\n Launch the software from an RFET or RODT file, or,\r\n");
         strcat21(str, "\r\n Go to Menu -> File -> Open... then do Evaluate.\r\n");
         display_main_text(str);
         #endif
@@ -343,7 +331,7 @@ static void main_window_destroy (HWND hWnd)
         SendMessage (hWnd_main_text , WM_SETTEXT, 0, 0);
         set_undo (hWnd_main_text, 0);
 
-        //tools_clean();
+        tools_clean();
         DestroyWindow(hWnd);
     }
 }
@@ -359,6 +347,7 @@ static void main_window_destroy (HWND hWnd)
 */
 static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    HMENU hMenu, hMenu_main;
     TCHAR filename[MAX_FILE_NAME];
     int low, high;
     PAINTSTRUCT ps;
@@ -367,38 +356,44 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     {
 
     case WM_INITMENUPOPUP:
-        if((HMENU)wParam == hMenu_edit)
+        hMenu_main = GetMenu(hWnd);
+        hMenu = (HMENU)wParam;
+        if(hMenu == GetSubMenu(hMenu_main, 0)) // if Menu->File
+        {
+            EnableMenuItem(hMenu, IDM_RELOAD, (file_exists_get() ? MF_ENABLED : MF_GRAYED));
+        }
+        else if(hMenu == GetSubMenu(hMenu_main, 1)) // if Menu->Edit
         {
             if(get_undo(hWnd_focused)==0
-            && SendMessage (hWnd_focused, EM_GETMODIFY, 0, 0))
+            && SendMessage(hWnd_focused, EM_GETMODIFY, 0, 0))
                 set_undo(hWnd_focused, 1);
 
             if(SendMessage (hWnd_focused, EM_GETMODIFY, 0, 0))
-                 EnableMenuItem (hMenu_edit, IDM_UNDO, MF_ENABLED);
-            else EnableMenuItem (hMenu_edit, IDM_UNDO, MF_GRAYED);
+                 EnableMenuItem(hMenu, IDM_UNDO, MF_ENABLED);
+            else EnableMenuItem(hMenu, IDM_UNDO, MF_GRAYED);
 
             SendMessage (hWnd_focused, EM_GETSEL, (WPARAM)&low, (LPARAM)&high);
-            EnableMenuItem (hMenu_edit, IDM_CUT   , (low==high ? MF_GRAYED : MF_ENABLED));
-            EnableMenuItem (hMenu_edit, IDM_COPY  , (low==high ? MF_GRAYED : MF_ENABLED));
-            EnableMenuItem (hMenu_edit, IDM_DELETE, (low==high ? MF_GRAYED : MF_ENABLED));
+            EnableMenuItem(hMenu, IDM_CUT   , (low==high ? MF_GRAYED : MF_ENABLED));
+            EnableMenuItem(hMenu, IDM_COPY  , (low==high ? MF_GRAYED : MF_ENABLED));
+            EnableMenuItem(hMenu, IDM_DELETE, (low==high ? MF_GRAYED : MF_ENABLED));
 
             if(low == 0 && high == SendMessage(hWnd_focused, WM_GETTEXTLENGTH, 0, 0))
-                 EnableMenuItem (hMenu_edit, IDM_SELECTALL, MF_GRAYED);
-            else EnableMenuItem (hMenu_edit, IDM_SELECTALL, MF_ENABLED);
+                 EnableMenuItem(hMenu, IDM_SELECTALL, MF_GRAYED);
+            else EnableMenuItem(hMenu, IDM_SELECTALL, MF_ENABLED);
         }
-        else if((HMENU)wParam == hMenu_view)
+        else if(hMenu == GetSubMenu(hMenu_main, 2)) // if Menu->View
         {
             GetWindowPlacement (hWnd_main_window, &wPlacement);
             if(wPlacement.showCmd == SW_MAXIMIZE)
-                 CheckMenuItem (hMenu_view, IDM_FULLSCREEN, MF_CHECKED);
-            else CheckMenuItem (hMenu_view, IDM_FULLSCREEN, MF_UNCHECKED);
+                 CheckMenuItem(hMenu, IDM_FULLSCREEN, MF_CHECKED);
+            else CheckMenuItem(hMenu, IDM_FULLSCREEN, MF_UNCHECKED);
         }
-        else if((HMENU)wParam == hMenu_tool)
+        else if(hMenu == GetSubMenu(hMenu_main, 4)) // if Menu->Tools
         {
             #ifdef LIBRODT
             UINT choice = (camera_list->size==0 && surface_list->size==0) ? MF_GRAYED : MF_ENABLED;
-            EnableMenuItem (hMenu_tool, IDM_SAVEALLOBJECTS, choice);
-            EnableMenuItem (hMenu_tool, IDM_REMOVEALLOBJECTS, choice);
+            EnableMenuItem(hMenu, IDM_SAVEALLOBJECTS, choice);
+            EnableMenuItem(hMenu, IDM_REMOVEALLOBJECTS, choice);
             #endif
         }
         break;
@@ -504,15 +499,8 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 
     case WM_CREATE:
-        hMenu_main   = GetMenu (hWnd);
-        hMenu_file   = GetSubMenu (hMenu_main, 0);
-        hMenu_edit   = GetSubMenu (hMenu_main, 1);
-        hMenu_view   = GetSubMenu (hMenu_main, 2);
-        hMenu_tool   = GetSubMenu (hMenu_main, 3);
-        hMenu_help   = GetSubMenu (hMenu_main, 4);
-        hMenu_keypad = GetSubMenu (hMenu_view, 1);
-
-        CheckMenuRadioItem (hMenu_keypad, IDM_STANDARD, IDM_VIEW_NONE, IDM_VIEW_NONE, MF_BYCOMMAND);
+        hMenu = GetSubMenu(GetSubMenu(GetMenu(hWnd), 2), 1); // get Menu->View->keypad
+        CheckMenuRadioItem(hMenu, IDM_STANDARD, IDM_VIEW_NONE, IDM_VIEW_NONE, MF_BYCOMMAND);
 
         tools_init(10000000,NULL);
 
@@ -543,7 +531,7 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
          break;
 
     case WM_DESTROY:
-        //tools_clean();
+        tools_clean();
         font_remove();
         PostQuitMessage(0);
         break;

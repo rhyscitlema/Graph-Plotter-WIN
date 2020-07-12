@@ -1,0 +1,12 @@
+  x1 , x2 , f(x1) , f(x2) ;
+
+ x1 = ( -b + sqrt(b^2 - 4*a*c) ) / (2a) ;
+
+ x2 = ( -b - sqrt(b^2 - 4*a*c) ) / (2a) ;
+
+ f(x) = a x^2 + b x + c ;
+
+ a = 2;  b = -2;  c = 1;
+
+ # Solving for x where f(x) = 0
+ # Change the coefficients a, b and c

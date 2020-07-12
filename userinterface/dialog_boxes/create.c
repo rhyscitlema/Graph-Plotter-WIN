@@ -105,7 +105,7 @@ static const wchar* user_entry_apply_for_goto (const wchar* entry)
     int i, j, k, n;
     HWND hWnd_active = hWnd_main_text;
 
-    const value* vst = mfet_parse_and_evaluate(entry, L"goto", VST11);
+    const value* vst = rfet_parse_and_evaluate(entry, L"goto", VST11);
     if(!vst || !integerFromVst(&n, vst, 1, errorMessage(), "goto")) return errorMessage();
 
     hWnd_get_text(&buffer, hWnd_active);
@@ -120,7 +120,7 @@ static const wchar* user_entry_apply_for_goto (const wchar* entry)
         for(i=2; ; i++)
         {
             if(j==n) break;
-            if(buffer[i-1]=='\n' && buffer[i-2]=='\r')
+            if(buffer[i-1]=='\n')
             { j++; k=i; }
             if(buffer[i]==0) break;
         }
@@ -153,7 +153,7 @@ void get_caret_position (HWND hWnd_text, int *line_ptr, int *coln_ptr)
     {   coln=2;
         for(i=2; ; i++)
         {
-            if(buffer[i-1]=='\n' && buffer[i-2]=='\r')
+            if(buffer[i-1]=='\n')
             { line++; coln=1; }
             else coln++;
             if(i==post) break;

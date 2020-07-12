@@ -1,6 +1,0 @@
-             x ,  # print in default base 10
- tostr(0b10, x),  # print in given   base 2
- tostr(0o10, x),  # print in given   base 8
- tostr(0x10, x);  # print in given   base 16
-
-x = (10, 0b10, 0o10, 0x10);

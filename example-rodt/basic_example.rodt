@@ -17,7 +17,7 @@ message = "
 
 ";
 
-\mfet{0;
+\rfet{0;
  type =  "Camera" ;
  name =  "Camera0" ;
 
@@ -28,7 +28,7 @@ message = "
  zoom =  1 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph1" ;
 
@@ -45,11 +45,11 @@ message = "
  accuracy =  1 ;
 }
 
-\mfet{0;
+\rfet{0;
  type =  "Surface" ;
  name =  "Graph2" ;
 
- origin =  (-1, 0, 10) := "|file.mfet".moveObject(current);
+ origin =  (-1, 0, 10) := "|file.rfet".moveObject(current);
 
  axes =  {1,0,0},{0,1,0},{0,0,1} ;
 

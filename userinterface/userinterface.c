@@ -68,10 +68,7 @@ const wchar* userinterface_get_text (enum UI_ITEM ui_item)
     return buffer;
 }
 
-void userinterface_clean ()
-{
-    mchar_free(buffer); buffer=NULL;
-}
+void userinterface_clean () { wchar_free(buffer); buffer=NULL; }
 
 
 #define IDT_TIMER 0
@@ -95,4 +92,3 @@ void timer_set_period_do (int period)
              period,      // interval in milliseconds
              (TIMERPROC) timer_handler);
 }
-

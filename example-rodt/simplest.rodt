@@ -2,12 +2,12 @@
 
 type = "Rhyscitlema_Objects_Definition_Text" ;
 
-\mfet{0;
+\rfet{0;
 type = "Camera";
 name = "Camera0";
 }
 
-\mfet{0;
+\rfet{0;
 type = "Surface";
 name = "Surface0";
 }
