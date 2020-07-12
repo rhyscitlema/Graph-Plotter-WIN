@@ -9,9 +9,8 @@
 
 #include <windows.h>
 #include <tchar.h>
+#include <_value.h>
 #include <_string.h>
-
-#define MAX_FILE_NAME 300
 
 extern HINSTANCE main_hInst;
 extern HWND hWnd_main_window;
@@ -40,21 +39,12 @@ extern HWND hWnd_calc_result;
 extern HWND hWnd_status_bar;
 extern HWND hWnd_focused;
 
-bool SetWindowTitle (HWND hWnd, const TCHAR* fileName, bool fileExists);
+bool SetWindowTitle (HWND hWnd, const wchar* fileName);
 
 void get_caret_position (HWND hWnd_text, int *line_ptr, int *coln_ptr);
 
 bool keyboard_input_event (HWND dw, UINT message, WPARAM wParam, LPARAM lParam);
 
-static inline int hWnd_get_text (wchar** buffer_ptr, HWND hWnd)
-{
-    int length;
-    if(buffer_ptr==NULL) return 0;
-    length = 1+(int)SendMessage(hWnd, WM_GETTEXTLENGTH, 0, 0);
-    *buffer_ptr = wchar_alloc (*buffer_ptr, length);
-    SendMessage(hWnd, WM_GETTEXT, length+1, (LPARAM)(*buffer_ptr));
-    (*buffer_ptr)[length]=0;
-    return length;
-}
+const wchar* hWnd_get_text (HWND hWnd);
 
 #endif

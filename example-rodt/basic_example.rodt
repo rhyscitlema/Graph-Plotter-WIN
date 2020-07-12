@@ -32,9 +32,9 @@ message = "
  type =  "Surface" ;
  name =  "Graph1" ;
 
- origin =  (0, 0, 10) :=
-            current + Mouse_Left * 
-           (MouseMotion * PixelSize .* (10, 10, 10));
+ origin =  (0, 0, 10) := LHS +
+            (this==FocusedObject and Mouse_Left) * 
+            (MouseMotion / PixelsPUL .* (10, 10, 10));
 
  axes =  {1,0,0},{0,1,0},{0,0,1} ;
 
@@ -49,7 +49,7 @@ message = "
  type =  "Surface" ;
  name =  "Graph2" ;
 
- origin =  (-1, 0, 10) := "|file.rfet".moveObject(current);
+ origin =  (-1, 0, 10) := "|file.rfet".moveObject(this, LHS);
 
  axes =  {1,0,0},{0,1,0},{0,0,1} ;
 

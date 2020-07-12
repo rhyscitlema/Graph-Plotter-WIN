@@ -27,12 +27,12 @@ message = "
 
  axes =  file.Turn((1,0,0), (0,-1,0), (0,1,0), turnAngle);
 
- rectangle = (100, 100, 250, 250, 0, 0) := current + CameraResize ;
+ rectangle = (100, 100, 250, 250, 0, 0) := LHS + CameraResize ;
 
- zoom =  2 := file.zoomCamera(current);
+ zoom =  2 := file.zoomCamera(this, LHS);
 
- private movement  = ((0,0,0) := file.moveCamera(current));
- private turnAngle = ((0,0,0) := file.turnCamera(current));
+ private movement  = ((0,0,0) := file.moveCamera(this, LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(this, LHS));
 }
 
 \rfet{0;
@@ -44,12 +44,12 @@ message = "
 
  axes = file.Turn((-1,0,0), (0,1,0), (0,1,0),-turnAngle);
 
- rectangle = (500, 100, 250, 250, 0, 0) := current + CameraResize ;
+ rectangle = (500, 100, 250, 250, 0, 0) := LHS + CameraResize ;
 
- zoom =  2 := file.zoomCamera(current);
+ zoom =  2 := file.zoomCamera(this, LHS);
 
- private movement  = ((0,0,0) := file.moveCamera(current));
- private turnAngle = ((0,0,0) := file.turnCamera(current));
+ private movement  = ((0,0,0) := file.moveCamera(this, LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(this, LHS));
 }
 
 
@@ -75,8 +75,8 @@ message = "
  boundary  =  {-bdr, bdr, -bdr, bdr, 0, 0} ;
  accuracy  =  1 ;
 
- private movement  = ((0,0,0) := file.moveObject(current));
- private turnAngle = ((0,0,0) := file.turnObject(current));
+ private movement  = ((0,0,0) := file.moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := file.turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -86,8 +86,8 @@ message = "
  origin =  position((0,0,0),movement);
  axes   =  turn(turnAngle);
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 
  function(x,y,z) =  0 ;
  accuracy        =  10 ;
@@ -106,11 +106,12 @@ message = "
                                (1-(2y+1)/squares) * "Board".bdr, 0)
                              +( (1,1,0) .* movement ) ) ;
 
- turnObject(current) = current + Key_Ctrl * (MouseMotion * PixelSize .* (10, -10, 10)) ;
+ turnObject(obj, old) = old + (obj==FocusedObject and Key_Ctrl) * (MouseMotion / PixelsPUL .* (10, -10, 10)) ;
 
- moveObject(current) = current + Mouse_Left * ("Board".axes * CameraAxes^T * (MouseMotion .* (D, D, 0))) ;
+ moveObject(obj, old) = old + ( not(obj==FocusedObject and Mouse_Left) ? (0,0,0) :
+                    ("Board".axes * FocusedCamera.axes^T * (MouseMotion .* (D, D, 0))) );
 
- private D = CameraDistance * PixelSize ;
+ private D = CameraDistance / PixelsPUL ;
 }
 
 \rfet{0;
@@ -120,8 +121,8 @@ message = "
  origin =  position((0,0,0), movement);
  axes   =  turn(turnAngle);
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 
  colour(x,y,z) = (x^2+y^2 >  bdr^2) ? {0,0,0,0} :
                  (x^2+y^2 <= bdr^2/1.5) ? {0,0,1,1} : {0,1,0,1};
@@ -137,8 +138,8 @@ message = "
  origin = position((2,0,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -148,8 +149,8 @@ message = "
  origin = position((4,0,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -159,8 +160,8 @@ message = "
  origin = position((6,0,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -170,8 +171,8 @@ message = "
  origin = position((1,1,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -181,8 +182,8 @@ message = "
  origin = position((3,1,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -192,8 +193,8 @@ message = "
  origin = position((5,1,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -203,8 +204,8 @@ message = "
  origin = position((7,1,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -214,8 +215,8 @@ message = "
  origin = position((0,2,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -225,8 +226,8 @@ message = "
  origin = position((2,2,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -236,8 +237,8 @@ message = "
  origin = position((4,2,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -247,8 +248,8 @@ message = "
  origin = position((6,2,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 
@@ -259,8 +260,8 @@ message = "
  origin = position((2,0,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -270,8 +271,8 @@ message = "
  origin = position((4,0,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -281,8 +282,8 @@ message = "
  origin = position((6,0,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -292,8 +293,8 @@ message = "
  origin = position((1,1,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -303,8 +304,8 @@ message = "
  origin = position((3,1,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -314,8 +315,8 @@ message = "
  origin = position((5,1,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -325,8 +326,8 @@ message = "
  origin = position((7,1,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -336,8 +337,8 @@ message = "
  origin = position((0,2,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -347,8 +348,8 @@ message = "
  origin = position((2,2,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -358,8 +359,8 @@ message = "
  origin = position((4,2,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 
 \rfet{0;
@@ -369,7 +370,7 @@ message = "
  origin = position((6,2,0),movement) ;
  axes   = turn(turnAngle) ;
 
- private movement  = ((0,0,0) := moveObject(current));
- private turnAngle = ((0,0,0) := turnObject(current));
+ private movement  = ((0,0,0) := moveObject(this, LHS));
+ private turnAngle = ((0,0,0) := turnObject(this, LHS));
 }
 

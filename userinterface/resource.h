@@ -46,9 +46,10 @@
 #define IDM_CHR_TO_PCN                  30108
 #define IDM_CHR_TO_FCN                  30109
 #define IDM_SET_PIF_CN                  30110
-#define IDM_FIND                        30111
-#define IDM_REPLACE                     30112
-#define IDM_GOTO                        30113
+#define IDM_CONVERT_TEXT                30111
+#define IDM_FIND                        30112
+#define IDM_REPLACE                     30113
+#define IDM_GOTO                        30114
 
 #define IDM_FULLSCREEN                  30200
 #define IDM_STANDARD                    30201
@@ -94,5 +95,11 @@
 
 #define IDC_STATUS_BAR                  30517
 
+//--------------------------------------------
+
+#ifndef RT_MANIFEST
+#define RT_MANIFEST                       24
+#define CREATEPROCESS_MANIFEST_RESOURCE_ID 1
+#endif
 
 #endif

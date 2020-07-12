@@ -26,12 +26,12 @@ message = "
 
  axes = file.Turn((1,0,0), (0,-1,0), (0,1,0), turnAngle);
 
- rectangle = (100, 100, 350, 250, 0, 0) := current + CameraResize ;
+ rectangle = (100, 100, 350, 250, 0, 0) := LHS + CameraResize ;
 
- zoom =  1 := file.zoomCamera(current) ;
+ zoom =  1 := file.zoomCamera(this, LHS) ;
 
- private movement  = ((0,0,0) := file.moveCamera(current));
- private turnAngle = ((0,0,0) := file.turnCamera(current));
+ private movement  = ((0,0,0) := file.moveCamera(this, LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(this, LHS));
 }
 
 \rfet{0;
@@ -43,8 +43,8 @@ message = "
 
  axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
 
- private movement  =  (0,0,0) := file.moveObject(current) ;
- private turnAngle =  (0,0,0) := file.turnObject(current) ;
+ private movement  =  (0,0,0) := file.moveObject(this, LHS) ;
+ private turnAngle =  (0,0,0) := file.turnObject(this, LHS) ;
 
  private f(x,y,z) = x^6 + y^6 - x^2 ;
  function(x,y,z) = f(x/4, y/4, z/4) ;

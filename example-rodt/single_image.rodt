@@ -27,16 +27,16 @@ message = "
 
  axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
 
- private movement  =  (0,0,0) := file.moveObject(current) ;
- private turnAngle =  (0,0,0) := file.turnObject(current) ;
+ private movement  =  (0,0,0) := file.moveObject(this, LHS) ;
+ private turnAngle =  (0,0,0) := file.turnObject(this, LHS) ;
 
  private image = "image.jpeg";
  enclosed wh = GetImageWidthHeight(image) ;
  private width  = wh[0];
  private height = wh[1];
 
- private nx_px = ((0,  width-1) -  width/2)*PixelSize ;
- private ny_py = ((0, height-1) - height/2)*PixelSize ;
+ private nx_px = ((0,  width-1) -  width/2) / PixelsPUL ;
+ private ny_py = ((0, height-1) - height/2) / PixelsPUL ;
  private nx = nx_px[0];
  private px = nx_px[1];
  private ny = ny_py[0];
@@ -45,7 +45,7 @@ message = "
 
  private X(x) = ( width-1)*(x-nx)/(px-nx) ;
  private Y(y) = (height-1)*(y-ny)/(py-ny) ;
- private f(colour) = colour==(0,0,0,1) ? (0,0,0,1) : colour ;
+ private f(colour) = colour===(0,0,0,1) ? (0,0,0,1) : colour ;
  colour(x,y,z) = f(GetImagePixelColour(image, X(x), Y(y))) ;
 
  function(x,y,z) =  0 ;
@@ -60,13 +60,13 @@ message = "
  origin =  movement + {0,0,0} ;
  axes   = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
 
- private movement  = ((0,0,0) := file.moveCamera(current));
- private turnAngle = ((0,0,0) := file.turnCamera(current));
+ private movement  = ((0,0,0) := file.moveCamera(this, LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(this, LHS));
 
  private wh = "Image1".wh ;
 
- rectangle = (100, 100, wh[0], wh[1], 0, 0) := current + CameraResize ;
+ rectangle = (100, 100, wh[0], wh[1], 0, 0) := LHS + CameraResize ;
 
- zoom =  1 := file.zoomCamera(current) ;
+ zoom =  1 := file.zoomCamera(this, LHS) ;
 }
 

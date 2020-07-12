@@ -2,9 +2,9 @@
 # Explanation of file structure available at:
 # http://rhyscitlema.com/applications/makefile.html
 
-CALC_OUT_FILE = RFET_Calculator.exe
+CALC_OUT_FILE = Rhyscitlema_Calculator.exe
 
-GP3D_OUT_FILE = GraphPlotter3D.exe
+GP3D_OUT_FILE = Graph_Plotter_3D.exe
 
 CALC_OBJ_FILES = userinterface\main.o \
                  userinterface\files.o \
@@ -12,7 +12,6 @@ CALC_OBJ_FILES = userinterface\main.o \
                  userinterface\userinterface.o \
                  userinterface\resource.res \
                  userinterface\font.o \
-                 userinterface\undo_redo.o \
                  userinterface\dialog_boxes\about.o \
                  userinterface\dialog_boxes\print.o \
                  userinterface\dialog_boxes\create.o \
@@ -26,7 +25,7 @@ LIBALGO = ../algorithms
 LIB_STD = ../lib_std
 LIBRFET = ../librfet
 LIBRODT = ../librodt
-LIBRWIF = ../read_write_image_file
+LIBRWIF = ../../../read_write_image_file
 
 MinGW = C:/MinGW
 
@@ -49,6 +48,7 @@ CC_FLAGS = -I$(MinGW)/include \
            -I$(LIBRODT) \
            -I$(LIBRWIF) \
            -Wall \
+           -std=c99 \
            -pedantic \
            $(CFLAGS)
 
@@ -67,7 +67,8 @@ CALC_LD_LIBS = -luidt \
                -lrfet \
                -l_std \
                -lalgo \
-               -mwindows \
+               -lgdi32 \
+               -lcomdlg32 \
                $(LDLIBS)
 
 GP3D_LD_LIBS = -luidt \
@@ -101,8 +102,10 @@ clean:
 	cd $(LIB_STD) && $(MAKE) clean
 	cd $(LIBRFET) && $(MAKE) clean
 	cd $(LIBRODT) && $(MAKE) clean
+	cd userinterface && $(RM) *.o *.res
+	cd userinterface\dialog_boxes && $(RM) *.o
+	$(RM) *.exe
 	cd $(LIBRWIF) && $(MAKE) clean
-	$(RM) $(GP3D_OBJ_FILES) $(CALC_OUT_FILE) $(GP3D_OUT_FILE)
 
 #-------------------------------------------------
 

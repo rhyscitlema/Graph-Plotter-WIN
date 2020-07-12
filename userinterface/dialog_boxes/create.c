@@ -14,7 +14,7 @@ static HWND hWnd_dialog_box;
 
 static void (*user_entry_get) (wchar* entry);
 
-static const wchar* (*user_entry_apply) (const wchar* entry);
+static bool (*user_entry_apply) (value stack, const wchar* entry);
 
 
 
@@ -22,7 +22,7 @@ static const wchar* (*user_entry_apply) (const wchar* entry);
 static INT_PTR CALLBACK DialogBoxProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     wchar entry[300];
-    const wchar* error;
+    uint32_t stack[10000];
     UNREFERENCED_PARAMETER(lParam);
 
     switch (message)
@@ -42,9 +42,9 @@ static INT_PTR CALLBACK DialogBoxProc (HWND hWnd, UINT message, WPARAM wParam, L
             entry[0]=0;
             GetDlgItemText (hWnd, IDC_EDIT0, entry, sizeof(entry));
 
-            error = user_entry_apply(entry);
-            if(error!=NULL)
-            {   MessageBox (hWnd, error, L"Error", MB_OK);
+            if(!user_entry_apply(stack, entry))
+            {
+                MessageBox (hWnd, getMessage(vGet(stack)), L"Error", MB_OK);
                 SetFocus (hWnd);
                 return TRUE;
             }
@@ -70,7 +70,7 @@ static INT_PTR CALLBACK DialogBoxProc (HWND hWnd, UINT message, WPARAM wParam, L
 
 
 
-bool create_dialog_box (HWND hWnd, int IDD, void (*_user_entry_get) (wchar* entry), const wchar* (*_user_entry_apply) (const wchar* entry))
+bool create_dialog_box (HWND hWnd, int IDD, void (*_user_entry_get) (wchar* entry), bool (*_user_entry_apply) (value stack, const wchar* entry))
 {
     user_entry_get = _user_entry_get;
     user_entry_apply = _user_entry_apply;
@@ -91,8 +91,6 @@ bool create_dialog_box (HWND hWnd, int IDD, void (*_user_entry_get) (wchar* entr
 
 
 
-static wchar* buffer=NULL;
-
 static void user_entry_get_for_goto (wchar* entry)
 {
     int line;
@@ -100,15 +98,15 @@ static void user_entry_get_for_goto (wchar* entry)
     intToStr(entry, line);
 }
 
-static const wchar* user_entry_apply_for_goto (const wchar* entry)
+static bool user_entry_apply_for_goto (value stack, const wchar* entry)
 {
     int i, j, k, n;
     HWND hWnd_active = hWnd_main_text;
 
-    const value* vst = rfet_parse_and_evaluate(entry, L"goto", VST11);
-    if(!vst || !integerFromVst(&n, vst, 1, errorMessage(), "goto")) return errorMessage();
+    value v = rfet_parse_and_evaluate(stack, entry, L"GoTo", NULL);
+    if(!integFromValue(v, 1, 1, &n, "GoTo")) return false;
 
-    hWnd_get_text(&buffer, hWnd_active);
+    const wchar* buffer = hWnd_get_text(hWnd_active);
 
     if(n<1) n=1;
     j=1;
@@ -129,7 +127,7 @@ static const wchar* user_entry_apply_for_goto (const wchar* entry)
     SendMessage (hWnd_active, EM_SETSEL, k, k);
     SendMessage (hWnd_active, EM_SCROLLCARET, 0, 0);
     hWnd_focused = hWnd_active;
-    return NULL;
+    return true;
 }
 
 bool goto_dialog_box (HWND hWnd)
@@ -144,7 +142,7 @@ void get_caret_position (HWND hWnd_text, int *line_ptr, int *coln_ptr)
     // TODO: use EM_LINEINDEX with line=-1 instead
     SendMessage (hWnd_text, EM_GETSEL, (WPARAM)NULL, (LPARAM)&post);
 
-    hWnd_get_text (&buffer, hWnd_text);
+    const wchar* buffer = hWnd_get_text(hWnd_text);
 
     line=1;
     if(post==0 || buffer[0]==0) coln=1;

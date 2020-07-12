@@ -1,0 +1,5 @@
+ y , 0+y;   # integer + character = integer
+
+y = ('\u00A0' := LHS+1)  # y is a character
+
+# Evaluate then press play then observe.

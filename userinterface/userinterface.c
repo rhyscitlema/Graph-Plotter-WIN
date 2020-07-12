@@ -3,17 +3,17 @@
 *******************************************/
 
 #include "main.h"
-#include "files.h"
+#include <files.h>
 #include <_stdio.h>
 #include <userinterface.h>
 #include <timer.h>
 
 
 void wait_for_user_first (const wchar* title, const wchar* message)
-{ MessageBox (hWnd_main_window, message, title, MB_OK); }
+{ MessageBox(hWnd_main_window, message, title, MB_OK); }
 
 bool wait_for_confirmation (const wchar* title, const wchar* message)
-{ return (MessageBox (hWnd_main_window, message, title, MB_OKCANCEL) == IDOK) ? true : false; }
+{ return MessageBox(hWnd_main_window, message, title, MB_OKCANCEL) == IDOK; }
 
 
 static HWND get_hWnd_text (enum UI_ITEM ui_item)
@@ -35,18 +35,17 @@ static HWND get_hWnd_text (enum UI_ITEM ui_item)
 
 void userinterface_set_text (enum UI_ITEM ui_item, const wchar* text)
 {
-    const wchar* mstr;     
     static bool check=false;
     HWND hWnd_text = get_hWnd_text(ui_item);
-    if(hWnd_text == NULL) return;
+    if(hWnd_text==NULL) return;
 
     if(ui_item==UI_MAIN_TEXT)
     {
-        //if(file_exists_get())
+        if(get_file_name())
         {
             // first check if changes are minimal, if so then keep file opened
-            mstr = userinterface_get_text(UI_MAIN_TEXT);
-            if(0==strcmp22(text, mstr)) return;
+            //static wchar* buf = NULL; hWnd_get_text(&buf, hWnd_text);
+            if(0==strcmp22(text, userinterface_get_text(UI_MAIN_TEXT))) return;
 
             // call to new_file() will come back here
             if(check) return; else check=true;
@@ -54,21 +53,30 @@ void userinterface_set_text (enum UI_ITEM ui_item, const wchar* text)
         }
         check=false;
     }
-    SendMessage (hWnd_text, WM_SETTEXT, 0, (LPARAM)text);
+    SendMessage(hWnd_text, WM_SETTEXT, 0, (LPARAM)text);
 }
 
-
-static wchar* buffer = NULL;
 
 const wchar* userinterface_get_text (enum UI_ITEM ui_item)
 {
     HWND hWnd_text = get_hWnd_text(ui_item);
     if(hWnd_text==NULL) return NULL;
-    hWnd_get_text(&buffer, hWnd_text);
-    return buffer;
+    return hWnd_get_text(hWnd_text);
 }
 
-void userinterface_clean () { wchar_free(buffer); buffer=NULL; }
+void userinterface_clean () { hWnd_get_text(NULL); }
+
+
+const wchar* hWnd_get_text (HWND hWnd)
+{
+    static wchar* buffer = NULL;
+    if(!hWnd) { buffer = wchar_free(buffer); return NULL; }
+    int length = 1+(int)SendMessage(hWnd, WM_GETTEXTLENGTH, 0, 0);
+    buffer = wchar_alloc (buffer, length);
+    SendMessage(hWnd, WM_GETTEXT, length+1, (LPARAM)buffer);
+    buffer[length]=0;
+    return buffer;
+}
 
 
 #define IDT_TIMER 0

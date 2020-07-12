@@ -9,11 +9,11 @@ Software description:
 To compile on Windows with MinGW:
 
 1) First get the folders:
-    * ../algorithms
-    * ../lib_std
-    * ../librfet
-    * ../librodt
-    * ../read_write_image_file
+    * ..\algorithms
+    * ..\lib_std
+    * ..\librfet
+    * ..\librodt
+    * ..\read_write_image_file
 
 2) Install MinGW. Instructions are found at:
    http://www.mingw.org/wiki/Getting_Started
@@ -21,23 +21,24 @@ To compile on Windows with MinGW:
 
 3) Add the folder C:\MinGW\bin to
    the PATH environment variable.
-   (Search online for how to do this!)
+   Go onto the command line interface
+   and execute: SET PATH=C:\MinGW\bin
 
 4) Go to ../read_write_image_file and compile
    as per the instructions provided there for
-   the Windows platform.
+   compiling for the Microsoft Windows platform.
 
-5) Go into the command line interface terminal,
+5) While in the command line interface terminal,
    change directory to here, then finally execute:
     mingw32-make.exe
-or  mingw32-make.exe CFLAGS="-DNDEBUG -O3" LDLIBS="-s"
+or  mingw32-make.exe CFLAGS="-DNDEBUG -O2" LDLIBS="-s"
 
 
 To run, execute:
-    GraphPlotter3D.exe
+    Graph_Plotter_3D.exe
 
 To delete all created files, execute:
-    mingw32-make.exe clean RM=-del
+    mingw32-make.exe clean RM=del
 
 
 Provided by Rhyscitlema

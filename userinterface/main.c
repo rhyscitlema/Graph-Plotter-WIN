@@ -8,8 +8,8 @@
 #include "font.h"
 #include "files.h"
 #include "resource.h"
-#include "undo_redo.h"
 #include "dialog_boxes.h"
+
 #include <userinterface.h>
 #include <surface.h>
 #include <camera.h>
@@ -18,8 +18,9 @@
 #include <_stdio.h>
 
 
-static TCHAR szTitle[100];        // The title bar text
-static TCHAR szWindowClass[100];  // Main window class name
+
+static TCHAR szTitle[100];        // MainWindow title
+static TCHAR szWindowClass[100];  // MainWindow class
 
 static WINDOWPLACEMENT wPlacement;
 int main_window_width  = 600;
@@ -53,7 +54,7 @@ HWND hWnd_status_bar;
 HWND hWnd_focused;
 
 static BOOL createMainWindow (HINSTANCE hInstance, int nCmdShow);
-static LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
+static LRESULT CALLBACK MainWndProc (HWND, UINT, WPARAM, LPARAM);
 static void load_launched_file();
 
 
@@ -72,11 +73,11 @@ int WINAPI WinMain (HINSTANCE hInstance,
 
     // Initialise global strings
     #ifdef LIBRODT
-    strcpy21 (szTitle, "Rhyscitlema Graph Plotter 3D");
-    strcpy21 (szWindowClass, "Rhyscitlema Graph Plotter 3D - Software");
+    strcpy21(szTitle, "Rhyscitlema Graph Plotter 3D");
+    strcpy21(szWindowClass, "Rhyscitlema Graph Plotter 3D Software");
     #else
-    strcpy21 (szTitle, "Rhyscitlema RFET Calculator");
-    strcpy21 (szWindowClass, "Rhyscitlema RFET Calculator - Software");
+    strcpy21(szTitle, "Rhyscitlema Calculator");
+    strcpy21(szWindowClass, "Rhyscitlema Calculator Software");
     #endif
 
     // Initialise accelerator table
@@ -119,7 +120,7 @@ static BOOL createMainWindow (HINSTANCE hInstance, int nCmdShow)
     wcex.cbSize         = sizeof(WNDCLASSEX);
     wcex.style          = CS_HREDRAW | CS_VREDRAW;
     wcex.lpszClassName  = szWindowClass;
-    wcex.lpfnWndProc    = WndProc;
+    wcex.lpfnWndProc    = MainWndProc;
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
@@ -154,14 +155,15 @@ static BOOL createMainWindow (HINSTANCE hInstance, int nCmdShow)
 
 
 
-bool SetWindowTitle (HWND hWnd, const TCHAR* fileName, bool fileExists)
+bool SetWindowTitle (HWND hWnd, const wchar* fileName)
 {
-    TCHAR title[MAX_FILE_NAME];
-    sprintf2(title, L"%s - %s ", get_name_from_path_name(NULL, fileName), szTitle);
+    wchar title[MAX_PATH_LEN+1];
+    if(!fileName || !*fileName) fileName = L"newfile.txt";
+    strcpy22(title, get_name_from_path_name(fileName));
+    strcat22(title, L" - ");
+    strcat22(title, szTitle);
     return SetWindowText(hWnd, title);
 }
-
-
 
 static void SetStatusBar (HWND hWnd_text)
 {
@@ -173,51 +175,76 @@ static void SetStatusBar (HWND hWnd_text)
     if(Line==line && Coln==coln) return;
     Line=line; Coln=coln;
 
-    sprintf2(str, L" Line:Coln %s:%s ", TIS2(0,line), TIS2(1,coln));
-    SendMessage (hWnd_status_bar, WM_SETTEXT, 0, (LPARAM)str);
+    const_Str2 argv[3] = {
+        L" (Line,Coln) = (%s,%s) ", TIS2(0,line), TIS2(1,coln) };
+    sprintf2(str, 3, argv);
+    SendMessage(hWnd_status_bar, WM_SETTEXT, 0, (LPARAM)str);
 }
 
 
 
-static bool on_launch_or_drop_file (const wchar* fileName)
+/* get next command line argument */
+const wchar* GetWord2 (wchar* out, const wchar* in)
 {
-    const wchar* extension;
-    if(!open_file(fileName)) { display_message(errorMessage()); return false; }
-    get_path_from_path_name (default_file_path, fileName);
-    extension = get_extension_from_name(NULL, fileName);
+    bool escape=0;
+    int onLoad=0;
+    while(in && *in)
+    {
+        wchar c = *in;
+        if(!escape && c=='"')
+        {
+            if(onLoad)
+            { if(out) *out++ = c;
+              in++; break;
+            }else onLoad=2;
+        }
+        if(!escape && isSpace(c))
+            { if(onLoad==1) break; }
+        else if(onLoad==0) { onLoad=1; }
+        escape = !escape && (c=='\\');
+        if(onLoad && out) *out++ = c;
+        in++;
+    }
+    if(out) *out=0;
+    return in;
+}
+
+static void on_launch_or_drop_file (const wchar* fileName)
+{
+    if(!open_file(fileName)) return;
+    get_path_from_path_name(fileName, default_file_path());
+    const wchar* extension = get_extension_from_name(fileName);
+
     if(0==strcmp21(extension, "rodt")
     || 0==strcmp21(extension, "rfet"))
-        tools_do_eval(get_name_from_path_name(NULL,fileName));
-    return true;
+        tools_do_eval(get_name_from_path_name(fileName));
 }
 
 static void load_launched_file ()
 {
-    int i;
-    wchar str[MAX_PATH_SIZE];
-    wchar* argv=NULL;
+    wchar name[MAX_PATH_LEN+1];
     const wchar* CmdLine;
     CmdLine = GetCommandLine();
-    CmdLine = sgets2(CmdLine, NULL);  // skip the program file name
+    CmdLine = GetWord2(NULL, CmdLine);  // skip the program file name
+    int i;
     for(i=1; ; i++)
     {
-        CmdLine = sgets2(CmdLine, &argv); // get the opened file name
-        if(!argv || !argv[0]) break;
-        on_launch_or_drop_file(argv);
+        CmdLine = GetWord2(name, CmdLine); // get name of file to open
+        if(!name[0]) break;
+        on_launch_or_drop_file(name);
     }
-    wchar_free(argv);
     if(i<=1)
     {
         #ifdef LIBRODT
-        strcpy21(str, "\r\n To get started:\r\n");
-        strcat21(str, "\r\n Drag-and-drop to open an RFET or RODT File, or,\r\n");
-        strcat21(str, "\r\n Launch the software from an RFET or RODT file, or,\r\n");
-        strcat21(str, "\r\n Go to Menu -> File -> Open... then do Evaluate.\r\n");
-        display_main_text(str);
+        display_main_text(
+           L"\r\n To get started:\r\n"
+            "\r\n Drag-and-drop a .rfet or .rodt file to open it, or,\r\n"
+            "\r\n Launch the software from a .rfet or .rodt file, or,\r\n"
+            "\r\n Go to Menu -> File -> Open... then do Evaluate (=).\r\n");
         #endif
     }
     #ifdef LIBRODT
-    calculator_evaluate_calc(true);
+    calculator_evaluate_calc(NULL, true);
     #endif
     userinterface_update();
 }
@@ -229,10 +256,16 @@ static inline void do_resize (HWND hWnd, int L[4])
 
 bool main_window_resize ()
 {
+    uint32_t stack[10000];
     int i=0, layout[20][4];
-    if(!tools_uidt_eval(layout, NULL))
-    { display_message(errorMessage()); return false; }
 
+    if(!main_window_width
+    || !main_window_height) return false;
+
+    if(!tools_uidt_eval(stack, layout, NULL))
+    { display_message(getMessage(vGet(stack))); return false; }
+
+    if(!hWnd_main_text) return true;
     do_resize (hWnd_main_text       , layout[i++]);
 
     do_resize (hWnd_eval_button     , layout[i++]);
@@ -261,9 +294,29 @@ bool main_window_resize ()
 
 static HWND create_button (HWND hWnd, int ID, const char* name)
 {
-    return CreateWindowEx (0, L"BUTTON", (const TCHAR*)CST21(name),
+    return CreateWindowEx (0, L"BUTTON", C21(name),
                            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
                            0,0,0,0, hWnd, (HMENU)(UINT_PTR)ID, main_hInst, NULL);
+}
+
+static WNDPROC default_EditWndProc;
+static LRESULT CALLBACK EditWndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch(message)
+    {
+    case WM_KEYDOWN:
+    case WM_KEYUP:
+        if(wParam==VK_LEFT || wParam==VK_RIGHT
+        || wParam==VK_HOME || wParam==VK_END)
+            SetStatusBar(hWnd);
+        break;
+    case WM_CHAR:
+        if(wParam==VK_RETURN) {
+            if(hWnd==hWnd_path_text) { tools_do_select(); return 0; }
+            if(hWnd==hWnd_time_text) { tools_set_time(0); return 0; }
+        } break;
+    }
+    return CallWindowProc(default_EditWndProc, hWnd, message, wParam, lParam);
 }
 
 static void main_window_create (HWND hWnd)
@@ -288,7 +341,7 @@ static void main_window_create (HWND hWnd)
                         0,0,0,0, hWnd, (HMENU)IDC_TIME_TEXT, main_hInst, NULL);
     hWnd_calc_input =
         #ifdef LIBRODT
-		CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L" LocalPointedPoint",
+		CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L" PointedPoint,\r\n PointedObject",
         #else
 		CreateWindowEx (WS_EX_CLIENTEDGE, L"EDIT", L" 1+1 ",
         #endif
@@ -321,6 +374,14 @@ static void main_window_create (HWND hWnd)
     hWnd_calc_button    = create_button (hWnd, IDC_CALC_BUTTON      , TEXT_CALC);
 
     main_window_resize();
+
+    default_EditWndProc = (WNDPROC)GetWindowLong(hWnd_main_text, GWL_WNDPROC);
+    SetWindowLong(hWnd_main_text  , GWL_WNDPROC, (LONG)EditWndProc);
+    SetWindowLong(hWnd_mesg_text  , GWL_WNDPROC, (LONG)EditWndProc);
+    SetWindowLong(hWnd_path_text  , GWL_WNDPROC, (LONG)EditWndProc);
+    SetWindowLong(hWnd_time_text  , GWL_WNDPROC, (LONG)EditWndProc);
+    SetWindowLong(hWnd_calc_input , GWL_WNDPROC, (LONG)EditWndProc);
+    SetWindowLong(hWnd_calc_result, GWL_WNDPROC, (LONG)EditWndProc);
 }
 
 static void main_window_destroy (HWND hWnd)
@@ -329,8 +390,6 @@ static void main_window_destroy (HWND hWnd)
     {   // deal with any future call to check_save_changes()
         // especially since tools_clean() calls UI_MAIN_TEXT
         SendMessage (hWnd_main_text , WM_SETTEXT, 0, 0);
-        set_undo (hWnd_main_text, 0);
-
         tools_clean();
         DestroyWindow(hWnd);
     }
@@ -339,35 +398,32 @@ static void main_window_destroy (HWND hWnd)
 
 
 /*
-//  Process messages for the main window.
-//
+//  Process messages for the main window:
 //  WM_COMMAND  - process menu items and buttons
 //  WM_PAINT    - paint the main window
 //  WM_DESTROY  - post a quit message and return
 */
-static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK MainWndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HMENU hMenu, hMenu_main;
-    TCHAR filename[MAX_FILE_NAME];
+    wchar filename[MAX_PATH_LEN+1];
     int low, high;
     PAINTSTRUCT ps;
 
     switch (message)
     {
-
     case WM_INITMENUPOPUP:
         hMenu_main = GetMenu(hWnd);
         hMenu = (HMENU)wParam;
         if(hMenu == GetSubMenu(hMenu_main, 0)) // if Menu->File
         {
-            EnableMenuItem(hMenu, IDM_RELOAD, (file_exists_get() ? MF_ENABLED : MF_GRAYED));
+            if(SendMessage (hWnd_main_text, EM_GETMODIFY, 0, 0))
+                 EnableMenuItem(hMenu, IDM_SAVE, MF_ENABLED);
+            else EnableMenuItem(hMenu, IDM_SAVE, MF_GRAYED);
+            EnableMenuItem(hMenu, IDM_RELOAD, (get_file_name() ? MF_ENABLED : MF_GRAYED));
         }
         else if(hMenu == GetSubMenu(hMenu_main, 1)) // if Menu->Edit
         {
-            if(get_undo(hWnd_focused)==0
-            && SendMessage(hWnd_focused, EM_GETMODIFY, 0, 0))
-                set_undo(hWnd_focused, 1);
-
             if(SendMessage (hWnd_focused, EM_GETMODIFY, 0, 0))
                  EnableMenuItem(hMenu, IDM_UNDO, MF_ENABLED);
             else EnableMenuItem(hMenu, IDM_UNDO, MF_GRAYED);
@@ -388,10 +444,10 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                  CheckMenuItem(hMenu, IDM_FULLSCREEN, MF_CHECKED);
             else CheckMenuItem(hMenu, IDM_FULLSCREEN, MF_UNCHECKED);
         }
-        else if(hMenu == GetSubMenu(hMenu_main, 4)) // if Menu->Tools
+        else if(hMenu == GetSubMenu(hMenu_main, 3)) // if Menu->Tools
         {
             #ifdef LIBRODT
-            UINT choice = (camera_list->size==0 && surface_list->size==0) ? MF_GRAYED : MF_ENABLED;
+            UINT choice = (camera_list()->size==0 && surface_list()->size==0) ? MF_GRAYED : MF_ENABLED;
             EnableMenuItem(hMenu, IDM_SAVEALLOBJECTS, choice);
             EnableMenuItem(hMenu, IDM_REMOVEALLOBJECTS, choice);
             #endif
@@ -408,11 +464,9 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
          keyboard_input_event(hWnd, message, wParam, lParam);
          break;
 
-
     case WM_COMMAND:
         low  = LOWORD(wParam);
         high = HIWORD(wParam);
-
         switch(low)
         {
             // 1) For File Menu
@@ -423,6 +477,7 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             case IDM_RELOAD:        reload_file(); break;
             case IDM_PRINT:         print_dialog_box(hWnd); break;
             case IDM_EXIT:          main_window_destroy(hWnd); break;
+
             // 2) For Edit Menu
             case IDM_UNDO:          SendMessage (hWnd_focused, WM_UNDO  , 0, 0); break;
             case IDM_REDO:          break;
@@ -440,42 +495,31 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             case IDM_GOTO:          goto_dialog_box(hWnd); break;
 
             // 3) For View Menu
-            case IDM_FULLSCREEN:    if(wPlacement.showCmd == SW_MAXIMIZE)
-                                        ShowWindow (hWnd, SW_RESTORE);
-                                    else ShowWindow (hWnd, SW_MAXIMIZE);
+            case IDM_FULLSCREEN:    if(wPlacement.showCmd==SW_MAXIMIZE)
+                                         ShowWindow(hWnd, SW_RESTORE);
+                                    else ShowWindow(hWnd, SW_MAXIMIZE);
                                     break;
 
             case IDM_FONT:          font_dialog_box(hWnd); break;
 
             // 4) For Tool Menu
+            #ifdef LIBRODT
             case IDM_TAKE_PICTURE:      take_camera_picture(); break;
             case IDM_SAVEALLOBJECTS:    save_all_objects(); break;
             case IDM_REMOVEALLOBJECTS:  tools_remove_all_objects(true); break;
+            #endif
 
             // 5) For Help Menu
             case IDM_HELP:          break;
             case IDM_ABOUT:         about_dialog_box(hWnd); break;
 
             // 6) For text fields
-            case IDC_MAIN_TEXT:     hWnd_focused = hWnd_main_text;
-                                    SetStatusBar(hWnd_focused); break;
-
-            case IDC_MESG_TEXT:     hWnd_focused = hWnd_mesg_text;
-                                    SetStatusBar(hWnd_focused); break;
-
-            case IDC_PATH_TEXT:     hWnd_focused = hWnd_path_text;
-                                    if(high==EN_KILLFOCUS) tools_do_select();
-                                    SetStatusBar(hWnd_focused); break;
-
-            case IDC_TIME_TEXT:     hWnd_focused = hWnd_time_text;
-                                    if(high==EN_KILLFOCUS) tools_set_time(NULL);
-                                    SetStatusBar(hWnd_focused); break;
-
-            case IDC_CALC_INPUT:    hWnd_focused = hWnd_calc_input;
-                                    SetStatusBar(hWnd_focused); break;
-
-            case IDC_CALC_RESULT:   hWnd_focused = hWnd_calc_result;
-                                    SetStatusBar(hWnd_focused); break;
+            case IDC_MAIN_TEXT:     if(high==EN_SETFOCUS) hWnd_focused = hWnd_main_text; break;
+            case IDC_MESG_TEXT:     if(high==EN_SETFOCUS) hWnd_focused = hWnd_mesg_text; break;
+            case IDC_PATH_TEXT:     if(high==EN_SETFOCUS) hWnd_focused = hWnd_path_text; break;
+            case IDC_TIME_TEXT:     if(high==EN_SETFOCUS) hWnd_focused = hWnd_time_text; break;
+            case IDC_CALC_INPUT:    if(high==EN_SETFOCUS) hWnd_focused = hWnd_calc_input; break;
+            case IDC_CALC_RESULT:   if(high==EN_SETFOCUS) hWnd_focused = hWnd_calc_result; break;
 
             // 7) For buttons
             case IDC_EVAL_BUTTON:       tools_do_eval(NULL); break;
@@ -491,12 +535,11 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             case IDC_LOWER_BUTTON:      tools_lower_period(); break;
             case IDC_HIGHER_BUTTON:     tools_higher_period(); break;
 
-            case IDC_CALC_BUTTON: calculator_evaluate_calc(true); break;
+            case IDC_CALC_BUTTON: calculator_evaluate_calc(NULL, true); break;
 
             default: return DefWindowProc (hWnd, message, wParam, lParam);
         } // end of switch(low)
         break;
-
 
     case WM_CREATE:
         hMenu = GetSubMenu(GetSubMenu(GetMenu(hWnd), 2), 1); // get Menu->View->keypad
@@ -513,7 +556,6 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         font_initialise();
         new_file();
         break;
-
 
     case WM_SIZE:
         main_window_width  = LOWORD(lParam);
@@ -533,6 +575,7 @@ static LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     case WM_DESTROY:
         tools_clean();
         font_remove();
+        memory_print();
         PostQuitMessage(0);
         break;
 

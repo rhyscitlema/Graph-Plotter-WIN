@@ -1,0 +1,139 @@
+0;
+
+type = "Rhyscitlema_Objects_Definition_Text" ;
+
+message = "
+           left-click on a graph
+
+      or  right-click on a camera
+
+
+ click, maintain and move the mouse to turn
+
+ press ctrl, maintain and move the mouse to shift
+
+
+ http://www.rhyscitlema.com/applications/graph-plotter-3d
+
+";
+
+\rfet{0;
+ type =  "Camera" ;
+ name =  "Camera0" ;
+ file = "|file.rfet" ;
+
+ origin =  movement + {0, 150, 600} ;
+
+ axes = file.Turn((1,0,0), (0,-1,0), (0,1,0), turnAngle);
+
+ private movement  = ((0,0,0) := file.moveCamera(this, LHS)) ;
+ private turnAngle = ((0,0,0) := file.turnCamera(this, LHS)) + (0,-0.24,0) ;
+
+ rectangle = (100, 100, 800, 300, 0, 0) := LHS + CameraResize ;
+
+ zoom =  2 := file.zoomCamera(this, LHS) ;
+}
+
+\rfet{0;
+ type =  "Surface" ;
+ name =  "Graph0" ;
+
+ axes =  {1,0,0},{0,1,0},{0,0,1};
+
+ origin =  movement +
+          {(0 := LHS - Key_Left + Key_Right),
+           (0 := LHS + Key_Up - Key_Down) , 0};
+
+ private D = CameraDistance / PixelsPUL;
+ enclosed movement = (0,0,0) := LHS + ((this==FocusedObject) ?
+            (FocusedCamera.axes^T * (MouseMotion .* (D, D, 1))) : (0,0,0));
+
+ function(x,y,z) =  x^2 + y^2 + z^2 - bdr^2 ;
+ colour(x,y,z)   =  cabs( x/bdr, y/bdr, z/bdr, 1 ) ;
+ boundary        =  {-bdr, bdr, -bdr, bdr, -bdr, bdr} ;
+ accuracy        =  5 ;    bdr=4;
+}
+
+\rfet{0;
+ type =  "Surface" ;
+ name =  "Graph1" ;
+ file = "|file.rfet" ;
+
+ origin =  movement + position(0,0,6);
+ axes   =  file.Turn(x_axis, (0,1,0), (0,1,0), turnAngle);
+
+ private  movement  = ((0,0,0) := file.moveObject(this, LHS));
+ enclosed turnAngle = ((0,0,0) := file.turnObject(this, LHS)) + (0,0,t);
+ enclosed t = 4*time;
+
+ enclosed position(a,b,c) =
+        ( (distance+6a)cos(u) + 16sin(u)b , c,
+          (distance+6a)sin(u) - 16cos(u)b )
+          + movement + "Graph0".movement ;
+
+ private distance = 100 ;
+ private u = time*pi/4 ;
+ private x_axis = (-sin(u), 0, cos(u)) ;
+
+ function(x,y,z) =  x^2 + y^2 + z^2 - bdr^2 ;
+ colour(x,y,z)   =  { 0, cabs(y/bdr), 0, 1 } ;
+ boundary        =  {-bdr, bdr, -bdr, bdr, -bdr, bdr} ;
+ accuracy        =  4 ;    bdr=3;
+}
+
+
+\rfet{0;
+ type =  "Graph1" ;
+ name =  "Graph2" ;
+
+ origin = movement + position(0,0,3);
+ private movement  = ((0,0,0) := file.moveObject(this, LHS));
+ replace turnAngle = ((0,0,0) := file.turnObject(this, LHS));
+
+ function(x,y,z) =  0 ;
+ colour(x,y,z)   =  { 0, cabs(z)/10, 0, (1+sin(time))/2 };
+ boundary        =  {-30, 30, 0, 0, -10, 10} ;
+ accuracy        =  1 ;
+}
+
+\rfet{0;
+ type =  "Graph1" ;
+ name =  "Graph3" ;
+
+ origin = movement + position(1,1,0);
+ private movement  = ((0,0,0) := file.moveObject(this, LHS));
+ replace turnAngle = ((0,0,0) := file.turnObject(this, LHS)) - (0,0,t);
+
+ function(x,y,z) =  x^2 + y^2 - bdr^2 ;
+ colour(x,y,z)   =  cabs( x/bdr, 0/bdr, y/bdr, 1 ) ;
+ boundary        =  {-bdr, bdr, -bdr, bdr, -2, 2};
+ accuracy        =  10 ;   bdr=5;
+}
+
+\rfet{0;
+ type =  "Graph3" ;
+ name =  "Graph4" ;
+
+ origin = movement + position(-1,1,0);
+ private movement  = ((0,0,0) := file.moveObject(this, LHS));
+ replace turnAngle = ((0,0,0) := file.turnObject(this, LHS)) - (0,0,t);
+}
+
+\rfet{0;
+ type =  "Graph3" ;
+ name =  "Graph5" ;
+
+ origin = movement + position(1,-1,0);
+ private movement  = ((0,0,0) := file.moveObject(this, LHS));
+ replace turnAngle = ((0,0,0) := file.turnObject(this, LHS)) - (0.2,0,t);
+}
+
+\rfet{0;
+ type =  "Graph3" ;
+ name =  "Graph6" ;
+
+ origin = movement + position(-1,-1,0);
+ private movement  = ((0,0,0) := file.moveObject(this, LHS));
+ replace turnAngle = ((0,0,0) := file.turnObject(this, LHS)) - (0.2,0,t);
+}
+

@@ -3,7 +3,6 @@
 */
 
 #include "main.h"
-#include "undo_redo.h"
 #include <_stdio.h>
 #include <files.h>
 #include <timer.h>
@@ -12,19 +11,11 @@
 #include <userinterface.h>
 #include <surface.h>
 
-#define errormessage errorMessage()
+static const wchar* file_extension=NULL;
+static wchar g_file_name[MAX_PATH_LEN+1];
+const wchar* get_file_name() { return g_file_name[0] ? g_file_name : NULL; }
 
 
-
-static wchar g_file_name [MAX_FILE_NAME];
-static bool g_file_exists = false;
-
-const wchar* file_name_get() { return g_file_name; }
-bool file_exists_get() { return g_file_exists; }
-
-
-
-static wchar file_extension[10];
 
 static void getFilter (const wchar* file_extension, const wchar** filter, int *filterIndex)
 {
@@ -32,8 +23,8 @@ static void getFilter (const wchar* file_extension, const wchar** filter, int *f
     static const wchar* IMAGE = L"Portable Network Graphics (*.png)\0*.png\0All Files (*.*)\0*.*\0";
 
     int index =
-        (0==strcmp21(file_extension, "rodt")) ? 1 :
-        (0==strcmp21(file_extension, "rfet")) ? 2 :
+        (0==strcmp21(file_extension, "rfet")) ? 1 :
+        (0==strcmp21(file_extension, "rodt")) ? 2 :
         (0==strcmp21(file_extension, "txt" )) ? 3 :
 
         (0==strcmp21(file_extension, "png" )) ? 1+10 :
@@ -55,8 +46,6 @@ static void getFilter (const wchar* file_extension, const wchar** filter, int *f
     }
 }
 
-
-
 static OPENFILENAME ofn;
 
 static void Browsefile (HWND hwnd, wchar* file_name, const wchar* file_extension)
@@ -69,7 +58,7 @@ static void Browsefile (HWND hwnd, wchar* file_name, const wchar* file_extension
     ofn.lStructSize     = sizeof(ofn);
     ofn.hwndOwner       = hwnd;
     ofn.lpstrFile       = file_name;
-    ofn.nMaxFile        = MAX_FILE_NAME;
+    ofn.nMaxFile        = MAX_PATH_LEN+1;
     ofn.lpstrFilter     = filter;
     ofn.nFilterIndex    = filterIndex;
     ofn.lpstrFileTitle  = NULL;
@@ -86,7 +75,7 @@ static bool BrowseForOpenfile (HWND hWnd, wchar* file_name, const wchar* file_ex
 
 static bool BrowseForSavefile (HWND hWnd, wchar* file_name)
 {
-    Browsefile(hWnd, file_name, get_extension_from_name(NULL,file_name));
+    Browsefile(hWnd, file_name, get_extension_from_name(file_name));
     ofn.Flags |= OFN_OVERWRITEPROMPT;
     return GetSaveFileName(&ofn);
 }
@@ -96,125 +85,110 @@ static bool BrowseForSavefile (HWND hWnd, wchar* file_name)
 // save entry text field in a file
 bool save_file_as (const wchar* fileName)
 {
-    wchar filename [MAX_FILE_NAME];
+    wchar filename [MAX_PATH_LEN+1];
     HWND hWnd = hWnd_main_window;
 
-    if(fileName==NULL)
-    {
+    if(!fileName || !*fileName)
+    {   strcpy22(filename, g_file_name[0] ? g_file_name : L"newfile.txt");
+        if(!BrowseForSavefile(hWnd, filename)) return false;
         fileName = filename;
-        strcpy22 (filename, g_file_name);
-        if(!BrowseForSavefile(hWnd, filename)) return FALSE;
     }
-
-    const_Array2 content = { userinterface_get_text(UI_MAIN_TEXT), -1 };
-    if(!FileSave2(fileName, content))
+    value stack = stackArray();
+    stack = setStr22(stack, userinterface_get_text(UI_MAIN_TEXT));
+    stack = FileSave2(fileName, stack);
+    if(VERROR(stack))
     {
-        sprintf2(errormessage, L"Failed to save the file:\r\n%s", fileName);
-        MessageBox(hWnd, errormessage, L"Error", MB_OK);
-        return FALSE;
+        MessageBox(hWnd, getMessage(vGetPrev(stack)), L"Error", MB_OK);
+        return false;
     }
-    if(fileName != g_file_name)
+    if(0!=strcmp22(g_file_name, fileName))
     {
-        g_file_exists = true;
-        strcpy22 (g_file_name, fileName);
-        SetWindowTitle (hWnd, g_file_name, g_file_exists);
-        get_extension_from_name (file_extension, g_file_name);
+        strcpy22(g_file_name, fileName);
+        SetWindowTitle(hWnd, g_file_name);
+        file_extension = get_extension_from_name(g_file_name);
     }
-    if(SendMessage (hWnd_main_text, EM_GETMODIFY, 0, 0))
-        set_undo(hWnd_main_text, 1);
-    SendMessage (hWnd_main_text, EM_SETMODIFY, FALSE, 0);
-    return TRUE;
+    SendMessage(hWnd_main_text, EM_SETMODIFY, false, 0);
+    return true;
 }
-
-// save entry text field in currently opened file
-bool save_file ()
-{ return save_file_as (g_file_exists ? g_file_name : NULL); }
-
-
 
 // open a file and load into entry text field
 bool open_file (const wchar* fileName)
 {
-    long i;
-    Array2 content={0};
-    wchar filename [MAX_FILE_NAME];
+    wchar filename[MAX_PATH_LEN+1];
     HWND hWnd = hWnd_main_window;
 
-    if(!check_save_changes()) return FALSE;
+    if(!check_save_changes()) return false;
 
-    if(fileName==NULL)
-    {
+    if(!fileName || !*fileName)
+    {   filename[0] = 0;
+        if(!BrowseForOpenfile(hWnd, filename, file_extension)) return false;
         fileName = filename;
-        filename[0] = 0;
-        if(!BrowseForOpenfile(hWnd, filename, file_extension)) return FALSE;
     }
-    if((content = FileOpen2(fileName, content)).size<=0)
+    value stack = stackArray();
+    if(VERROR(FileOpen2(fileName, stack)))
     {
-        sprintf2(errormessage, L"Failed to open the file:\r\n%s", fileName);
-        MessageBox(hWnd, errormessage, L"Error", MB_OK);
-        return FALSE;
+        MessageBox(hWnd, getMessage(vGet(stack)), L"Error", MB_OK);
+        return false;
     }
-    for(i=0; i<content.size; i++)
-      if(content.data[i]==0) content.data[i] = 0xFFFF;
+    // prevent another call to check_save_changes()
+    SendMessage (hWnd_main_text, WM_SETTEXT, 0, 0);
 
-    if(g_file_name != fileName)
+    display_main_text(getStr2(vGet(stack)));
+
+    if(0!=strcmp22(g_file_name, fileName))
     {
-        g_file_exists = true;
-        strcpy22 (g_file_name, fileName);
-        SetWindowTitle (hWnd, g_file_name, g_file_exists);
-        get_extension_from_name (file_extension, g_file_name);
+        strcpy22(g_file_name, fileName);
+        SetWindowTitle(hWnd, g_file_name);
+        file_extension = get_extension_from_name(g_file_name);
     }
-    set_undo (hWnd_main_text, 0);
-    display_main_text(content.data);
-    wchar_free(content.data);
-    return TRUE;
+    return true;
 }
+
+// save entry text field in currently opened file
+bool save_file() { return save_file_as(get_file_name()); }
 
 // reload the currently opened file
-bool reload_file ()
-{ return g_file_exists ? open_file(g_file_name) : false; }
-
-
+bool reload_file() { return open_file(get_file_name()); }
 
 // start a new and empty file entry
-bool new_file ()
+bool new_file()
 {
     HWND hWnd = hWnd_main_window;
-    if(!check_save_changes()) return FALSE;
+    if(!check_save_changes()) return false;
 
-    g_file_exists = false;
-    strcpy21 (g_file_name, "newfile.txt");
-    SetWindowTitle (hWnd, g_file_name, g_file_exists);
-    file_extension[0]=0;
+    file_extension=NULL;
+    g_file_name[0]=0;
+    SetWindowTitle(hWnd, NULL);
 
-    SendMessage (hWnd_main_text , WM_SETTEXT, 0, 0);
-    set_undo (hWnd_main_text, 0);
-    return TRUE;
+    SendMessage (hWnd_main_text, WM_SETTEXT, 0, 0);
+    return true;
 }
-
-
 
 // notify user if entry text field has been modified
 bool check_save_changes ()
 {
-    wchar message[MAX_FILE_NAME];
-
     if(!SendMessage (hWnd_main_text, EM_GETMODIFY, 0, 0))
-        return TRUE; // no changes to save
+        return true; // no changes to save
 
+    const wchar* name = get_name_from_path_name(g_file_name);
+    if(!name || !*name) name = L"newfile.txt";
+
+    wchar message[strlen2(name)+100];
     strcpy22(message, L"Do you want to save changes to ");
-    strcat22(message, get_name_from_path_name(NULL, g_file_name));
+    strcat22(message, name);
     strcat22(message, L" ?");
 
     switch(MessageBox (hWnd_main_window, message, L"Save changes?", MB_YESNOCANCEL))
     {
-    case IDNO: return TRUE;
-    case IDYES: if(save_file()) return TRUE;
-    default: SetFocus(hWnd_focused); return FALSE;
+    case IDNO: return true;
+    case IDYES: if(save_file()) return true;
+    default: SetFocus(hWnd_focused); return false;
     }
 }
 
 
+
+#ifdef LIBRODT
 
 static wchar* set_rodt_of_objects (wchar* str, List* list)
 {
@@ -235,19 +209,18 @@ static wchar* set_rodt_of_objects (wchar* str, List* list)
 
 bool save_all_objects ()
 {
-    #ifdef LIBRODT
-    wchar fileName[MAX_PATH_SIZE];
+    wchar fileName[MAX_PATH_LEN+1];
     HWND hWnd = hWnd_main_window;
 
-    if(surface_list->size==0 && camera_list->size==0)
-    { MessageBox(hWnd, L"No object to save.", L"Error", MB_OK); return FALSE; }
+    if(surface_list()->size==0 && camera_list()->size==0)
+    { MessageBox(hWnd, L"No object to save.", L"Error", MB_OK); return false; }
 
-    Array2 content = { errormessage, -1 };
-    wchar* str = content.data;
+    value stack = stackArray();
+    wchar* str = (wchar*)(stack+2);
 
     // get the file name to save output to
     strcpy21(fileName, "save_all_objects.rodt");
-    if(!BrowseForSavefile (hWnd, fileName)) return FALSE;
+    if(!BrowseForSavefile (hWnd, fileName)) return false;
 
     // set the file header
     str = strcpy21(str, "0;\r\n\r\ntype = \"Rhyscitlema_Objects_Definition_Text\" ;\r\n");
@@ -255,19 +228,19 @@ bool save_all_objects ()
     // set the user message
     str = strcpy21(str, "\r\nmessage = \"");
     str = strcpy22(str, userMessage());
-    str = strcpy21(str, "\"\r\n");
+    str = strcpy21(str, "\";\r\n");
 
-    str = set_rodt_of_objects (str, camera_list);
-    str = set_rodt_of_objects (str, surface_list);
+    str = set_rodt_of_objects (str, camera_list());
+    str = set_rodt_of_objects (str, surface_list());
 
     // now save the output string to file
-    if(!FileSave2(fileName, ConstArray2(content)))
+    stack = setStr22(stack, (wchar*)(stack+2));
+    stack = FileSave2(fileName, stack);
+    if(VERROR(stack))
     {
-        sprintf2(errormessage, L"Failed to save the file:\r\n%s", fileName);
-        MessageBox(hWnd, errormessage, L"Error", MB_OK);
+        MessageBox(hWnd, getMessage(vGetPrev(stack)), L"Error", MB_OK);
         return false;
     }
-    #endif
     return true;
 }
 
@@ -276,11 +249,10 @@ bool save_all_objects ()
 #include <rwif.h>
 void take_camera_picture ()
 {
-#ifdef LIBRODT
     static bool firsttime = true;
     ImageData imagedata;
     Camera* camera;
-    wchar filename[300];
+    wchar filename[MAX_PATH_LEN+1];
     Mouse* mouse = headMouse;
     HWND hWnd = hWnd_main_window;
 
@@ -303,16 +275,19 @@ void take_camera_picture ()
     imagedata.width = camera->XSize;
     imagedata.bpp = 4*8;
 
-    if(write_image_file (CST12(filename), &imagedata))
+    wchar message[1000];
+    if(write_image_file (C12(filename), &imagedata))
     {
-        sprintf2(errormessage, L"Successfully saved %s.", get_name_from_path_name(NULL,filename));
-        display_message(errormessage);
+        const_Str2 argv[2] = { L"Successfully saved %s.", get_name_from_path_name(filename) };
+        sprintf2(message, 2, argv);
+        display_message(message);
     }
     else
     {
-        strcpy21(errormessage, rwif_errormessage);
-        display_message(errormessage);
-        MessageBox(hWnd, errormessage, L"Error", MB_OK);
+        strcpy21(message, rwif_errormessage);
+        display_message(message);
+        MessageBox(hWnd, message, L"Error", MB_OK);
     }
-#endif
 }
+
+#endif

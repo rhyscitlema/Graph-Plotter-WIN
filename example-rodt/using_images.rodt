@@ -26,12 +26,12 @@ message = "
 
  axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
 
- rectangle = (100, 100, 800, 600, 0 ,0) := current + CameraResize ;
+ rectangle = (100, 100, 800, 600, 0 ,0) := LHS + CameraResize ;
 
- zoom =  1 := file.zoomCamera(current) ;
+ zoom =  1 := file.zoomCamera(this, LHS) ;
 
- private movement  = ((0,0,0) := file.moveCamera(current));
- private turnAngle = ((0,0,0) := file.turnCamera(current));
+ private movement  = ((0,0,0) := file.moveCamera(this, LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(this, LHS));
 }
 
 \rfet{ width, height ;
@@ -44,8 +44,8 @@ message = "
 
  axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
 
- private  movement  =  (0,0,0) := file.moveObject(current) ;
- enclosed turnAngle =  (0,0,0) := file.turnObject(current) ;
+ private  movement  =  (0,0,0) := file.moveObject(this, LHS) ;
+ enclosed turnAngle =  (0,0,0) := file.turnObject(this, LHS) ;
 
  enclosed bdy = 8 ;
  enclosed bdx = bdy ;
@@ -66,12 +66,11 @@ message = "
 
  type =  "Image 1" ;
  name =  "Image 2" ;
- file = "|file.rfet" ;
 
  origin = movement + {0,-8.3,0};
 
- private movement  =  (0,0,0) := file.moveObject(current) ;
- replace turnAngle =  (0,0,0) := file.turnObject(current) ;
+ private movement  =  (0,0,0) := file.moveObject(this, LHS) ;
+ replace turnAngle =  (0,0,0) := file.turnObject(this, LHS) ;
 
  replace bdx = bdy * width/height ;
 }

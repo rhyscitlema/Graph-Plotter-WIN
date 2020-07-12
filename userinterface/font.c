@@ -53,9 +53,9 @@ void font_initialise ()
     logFont.lfEscapement     = 0;
     logFont.lfOrientation    = 0;
     logFont.lfWeight         = 0x190;
-    logFont.lfItalic         = FALSE;
-    logFont.lfUnderline      = FALSE;
-    logFont.lfStrikeOut      = FALSE;
+    logFont.lfItalic         = false;
+    logFont.lfUnderline      = false;
+    logFont.lfStrikeOut      = false;
     logFont.lfCharSet        = ANSI_CHARSET;
     logFont.lfOutPrecision   = OUT_DEFAULT_PRECIS;
     logFont.lfClipPrecision  = CLIP_DEFAULT_PRECIS;
@@ -66,7 +66,7 @@ void font_initialise ()
   //strcpy22(logFont.lfFaceName, L"Lucida Sans Unicode");
   //strcpy22(logFont.lfFaceName, L"Microsoft Sans Serif");
 
-    font_set (FALSE);
+    font_set (false);
 }
 
 
@@ -89,55 +89,44 @@ bool font_dialog_box (HWND hWnd)
 
     if(ChooseFont(&chooseFont))
     {
-        font_set (TRUE);
-        return TRUE;
+        font_set (true);
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 
-
 static int start, stop;
-static wchar* buffer = NULL;
+static const wchar* buffer = NULL;
 
 static bool get_text (HWND hWnd)
 {
     SendMessage (hWnd_focused, EM_GETSEL, (WPARAM)&start, (LPARAM)&stop);
-    if(start==stop) { MessageBox (hWnd, L"No text is selected." , L"Error", MB_OK); return FALSE; }
-    hWnd_get_text (&buffer, hWnd_focused);
-    strcpy22S (buffer, buffer+start, stop-start);
-    return TRUE;
+    if(start==stop) { MessageBox (hWnd, L"No text selected." , L"Error", MB_OK); return false; }
+    buffer = hWnd_get_text(hWnd_focused);
+    strcpy22S(WCHAR(buffer), buffer+start, stop-start);
+    return true;
 }
 
-static bool replace_text (const wchar* text)
+static bool replace_text (HWND hWnd, value (*CALL) (value v))
 {
-    SendMessage (hWnd_focused, EM_REPLACESEL, TRUE, (LPARAM)text);
+    if(!get_text(hWnd)) return false;
+    uint32_t stack[100000];
+    CALL(setStr22(stack, buffer));
+    const wchar* text = getStr2(vGet(stack));
+    SendMessage (hWnd_focused, EM_REPLACESEL, true, (LPARAM)text);
     SendMessage (hWnd_focused, EM_SETSEL, start, start+strlen2(text));
-    return TRUE;
+    return true;
 }
 
-bool font_pcn_to_chr (HWND hWnd)
-{
-    if(!get_text(hWnd)) return false;
-    return replace_text(pcn_to_chr_22(0,buffer));
-}
-
-bool font_chr_to_pcn (HWND hWnd)
-{
-    if(!get_text(hWnd)) return false;
-    return replace_text(chr_to_pcn_22(0,buffer));
-}
-
-bool font_chr_to_fcn (HWND hWnd)
-{
-    if(!get_text(hWnd)) return false;
-    return replace_text(chr_to_fcn_22(0,buffer));
-}
-
+bool font_pcn_to_chr (HWND hWnd) { return replace_text(hWnd, pcn_to_chr); }
+bool font_chr_to_pcn (HWND hWnd) { return replace_text(hWnd, chr_to_pcn); }
+bool font_chr_to_fcn (HWND hWnd) { return replace_text(hWnd, chr_to_fcn); }
 bool font_set_pif_cn (HWND hWnd)
 {
     if(!get_text(hWnd)) return false;
-    if(set_pif_cn(buffer)) return true;
-    MessageBox (hWnd, errorMessage(), L"Error", MB_OK);
+    uint32_t stack[100000];
+    if(!VERROR(set_pif_cn(setStr22(stack, buffer)))) return true;
+    MessageBox (hWnd, getMessage(vGet(stack)), L"Error", MB_OK);
     return false;
 }
