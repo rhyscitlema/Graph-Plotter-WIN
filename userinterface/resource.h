@@ -1,12 +1,12 @@
 /*
-    resource.h
+	resource.h
 
-    IDM => IDentity of Menu
-    IDS => IDentity of String
-    IDC => IDentity of Component
-    IDD => IDentity of Dialog box
+	IDM => IDentity of Menu
+	IDS => IDentity of String
+	IDC => IDentity of Component
+	IDD => IDentity of Dialog box
 
-    Note: the numbers should be within 16-bits
+	Note: the numbers should be within 16-bits
 */
 #ifndef _RESOURCE_H
 #define _RESOURCE_H

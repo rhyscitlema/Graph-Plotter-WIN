@@ -1,7 +1,7 @@
 #ifndef _USER_MAIN_GUI_H
 #define _USER_MAIN_GUI_H
 /*
-    main.h
+	main.h
 */
 #ifndef UNICODE
 #define UNICODE

@@ -19,9 +19,9 @@ extern bool print_dialog_box (HWND hWnd);
 
 extern bool about_dialog_box (HWND hWnd);
 
-extern bool create_dialog_box (
-    HWND hWnd, int IDD,     // provide IDentity of Dialog box
-    void (*user_entry_get) (wchar* entry),  // provide initial entry value
-    bool (*user_entry_apply) (value stack, const wchar* entry)); // return error message
+extern bool create_dialog_box ( // return error message
+	HWND hWnd, int IDD,         // provide IDentity of Dialog box
+	void (*user_entry_get) (wchar* entry),  // provide initial entry value
+	bool (*user_entry_apply) (value stack, const wchar* entry) );
 
 #endif
