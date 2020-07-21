@@ -1,0 +1,7 @@
+*.o
+*.exe
+userinterface/*.res
+userinterface/*.aps
+visualstudio/.vs
+visualstudio/x64
+visualstudio/*.user

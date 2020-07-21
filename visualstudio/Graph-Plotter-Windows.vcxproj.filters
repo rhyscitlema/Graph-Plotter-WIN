@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\userinterface\drawing_window.c" />
+    <ClCompile Include="..\userinterface\files.c" />
+    <ClCompile Include="..\userinterface\font.c" />
+    <ClCompile Include="..\userinterface\keyboard.c" />
+    <ClCompile Include="..\userinterface\main.c" />
+    <ClCompile Include="..\userinterface\mthread.c" />
+    <ClCompile Include="..\userinterface\undo_redo.c" />
+    <ClCompile Include="..\userinterface\userinterface.c" />
+    <ClCompile Include="..\userinterface\dialog_boxes\about.c">
+      <Filter>dialog_boxes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\userinterface\dialog_boxes\create.c">
+      <Filter>dialog_boxes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\userinterface\dialog_boxes\find_repl.c">
+      <Filter>dialog_boxes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\userinterface\dialog_boxes\print.c">
+      <Filter>dialog_boxes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\userinterface\dialog_boxes.h" />
+    <ClInclude Include="..\userinterface\font.h" />
+    <ClInclude Include="..\userinterface\main.h" />
+    <ClInclude Include="..\userinterface\resource.h" />
+    <ClInclude Include="..\userinterface\undo_redo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\userinterface\resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="dialog_boxes">
+      <UniqueIdentifier>{de82f53a-807f-4544-9d63-a75b08ffae56}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

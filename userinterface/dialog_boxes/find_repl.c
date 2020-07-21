@@ -131,7 +131,7 @@ static bool find_next (HWND hWnd)
 	}
 	else
 	{
-		wchar message[strlen2(findtext)+20];
+		wchar message[MAXSIZE+20];  // strlen2(findtext)+20
 		const wchar* argv[2] = { L"\"%s\" not found.", findtext };
 		sprintf2(message, 2, argv);
 		MessageBox(hWnd, message, L"Text not found", MB_OK);

@@ -252,19 +252,15 @@ static void load_launched_file ()
 		if(!name[0]) break;
 		on_launch_or_drop_file(name);
 	}
+	#ifdef LIBRODT
 	if(i<=1)
-	{
-		#ifdef LIBRODT
 		display_main_text(
 			L"1+1\r\n"
-			"\r\n#{ To get started:\r\n"
-			"\r\n Drag-and-drop a .rfet or .rodt file to open it, or,\r\n"
-			"\r\n Launch the software from a .rfet or .rodt file, or,\r\n"
-			"\r\n Go to Menu -> File -> Open... then do Evaluate (=).\r\n"
-			"}#");
-		#endif
-	}
-	#ifdef LIBRODT
+			L"\r\n#{ To get started:\r\n"
+			L"\r\n Drag-and-drop a .rfet or .rodt file to open it, or,\r\n"
+			L"\r\n Launch the software from a .rfet or .rodt file, or,\r\n"
+			L"\r\n Go to Menu -> File -> Open... then do Evaluate (=).\r\n"
+			L"}#");
 	calculator_evaluate_calc(NULL, true);
 	#endif
 	userinterface_update();
@@ -411,13 +407,13 @@ static void main_window_create (HWND hWnd)
 
 	main_window_resize();
 
-	default_EditWndProc = (WNDPROC)GetWindowLong(hWnd_main_text, GWL_WNDPROC);
-	SetWindowLong(hWnd_main_text  , GWL_WNDPROC, (LONG)EditWndProc);
-	SetWindowLong(hWnd_mesg_text  , GWL_WNDPROC, (LONG)EditWndProc);
-	SetWindowLong(hWnd_path_text  , GWL_WNDPROC, (LONG)EditWndProc);
-	SetWindowLong(hWnd_time_text  , GWL_WNDPROC, (LONG)EditWndProc);
-	SetWindowLong(hWnd_calc_input , GWL_WNDPROC, (LONG)EditWndProc);
-	SetWindowLong(hWnd_calc_result, GWL_WNDPROC, (LONG)EditWndProc);
+	default_EditWndProc = (WNDPROC)GetWindowLongPtr(hWnd_main_text, GWLP_WNDPROC);
+	SetWindowLongPtr(hWnd_main_text  , GWLP_WNDPROC, (LONG_PTR)EditWndProc);
+	SetWindowLongPtr(hWnd_mesg_text  , GWLP_WNDPROC, (LONG_PTR)EditWndProc);
+	SetWindowLongPtr(hWnd_path_text  , GWLP_WNDPROC, (LONG_PTR)EditWndProc);
+	SetWindowLongPtr(hWnd_time_text  , GWLP_WNDPROC, (LONG_PTR)EditWndProc);
+	SetWindowLongPtr(hWnd_calc_input , GWLP_WNDPROC, (LONG_PTR)EditWndProc);
+	SetWindowLongPtr(hWnd_calc_result, GWLP_WNDPROC, (LONG_PTR)EditWndProc);
 }
 
 static void main_window_destroy (HWND hWnd)

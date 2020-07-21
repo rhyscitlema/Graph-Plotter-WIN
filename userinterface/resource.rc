@@ -14,7 +14,7 @@ IDI_APP_ICON            ICON                   "icon_rodt.ico"
 IDI_APP_ICON            ICON                   "icon_rfet.ico"
 #endif
 
-CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "resource.manifest"
+//CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "resource.manifest"
 
 ////////////////////////////////////////////////////////////////////////
 //

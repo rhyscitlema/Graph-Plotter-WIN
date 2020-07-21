@@ -175,7 +175,7 @@ bool check_save_changes ()
 	const wchar* name = get_name_from_path_name(g_file_name);
 	if(!name || !*name) name = L"newfile.txt";
 
-	wchar message[strlen2(name)+100];
+	wchar message[1000+100]; // strlen2(name)+100
 	strcpy22(message, L"Do you want to save changes to ");
 	strcat22(message, name);
 	strcat22(message, L" ?");
