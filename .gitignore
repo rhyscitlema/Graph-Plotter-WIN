@@ -1,7 +1,8 @@
 *.o
 *.exe
-userinterface/*.res
-userinterface/*.aps
-visualstudio/.vs
-visualstudio/x64
-visualstudio/*.user
+*.res
+*.aps
+*.user
+.vs/
+x64/
+other/_*.rfet

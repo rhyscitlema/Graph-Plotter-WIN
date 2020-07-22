@@ -1,0 +1,224 @@
+//
+// Microsoft Visual C++ resource script
+//
+#include <windows.h>
+#include "resource.h"
+
+////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+#ifdef LIBRODT
+IDI_APP_ICON            ICON                   "icon_rodt.ico"
+#else
+IDI_APP_ICON            ICON                   "icon_rfet.ico"
+#endif
+
+//CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "resource.manifest"
+
+////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+IDC_APP_MENU MENU
+BEGIN
+	POPUP "&File"
+	BEGIN
+		MENUITEM "&New\tCtrl+N",                IDM_NEW
+		MENUITEM "&Open...\tCtrl+O",            IDM_OPEN
+		MENUITEM "&Save\tCtrl+S",               IDM_SAVE
+		MENUITEM "Save &As...",                 IDM_SAVEAS
+		MENUITEM SEPARATOR
+		MENUITEM "&Reload",                     IDM_RELOAD
+		MENUITEM "&Print...\tCtrl+P",           IDM_PRINT, GRAYED
+		MENUITEM SEPARATOR
+		MENUITEM "E&xit",                       IDM_EXIT
+	END
+
+	POPUP "&Edit"
+	BEGIN
+		MENUITEM "&Undo Redo\tCtrl+Z",          IDM_UNDO, GRAYED
+		//MENUITEM "R&edo\tCtrl+Shift+Z",       IDM_REDO, GRAYED
+		MENUITEM SEPARATOR
+		MENUITEM "Cu&t\tCtrl+X",                IDM_CUT, GRAYED
+		MENUITEM "&Copy\tCtrl+C",               IDM_COPY, GRAYED
+		MENUITEM "&Paste\tCtrl+V",              IDM_PASTE
+		MENUITEM "&Delete\tDel",                IDM_DELETE, GRAYED
+		MENUITEM SEPARATOR
+		MENUITEM "Select &All\tCtrl+A",         IDM_SELECTALL
+		POPUP "C&onvert Text"
+		BEGIN
+			MENUITEM " ", IDM_CONVERT_0, GRAYED
+			MENUITEM " ", IDM_CONVERT_1, GRAYED
+			MENUITEM " ", IDM_CONVERT_2, GRAYED
+			MENUITEM " ", IDM_CONVERT_3, GRAYED
+			MENUITEM SEPARATOR
+			MENUITEM " ", IDM_CONVERT_4, GRAYED
+			MENUITEM " ", IDM_CONVERT_5, GRAYED
+			MENUITEM " ", IDM_CONVERT_6, GRAYED
+			MENUITEM " ", IDM_CONVERT_7, GRAYED
+			MENUITEM SEPARATOR
+			MENUITEM " ", IDM_CONVERT_8, GRAYED
+			MENUITEM " ", IDM_CONVERT_9, GRAYED
+			MENUITEM " ", IDM_CONVERT_10, GRAYED
+			MENUITEM " ", IDM_CONVERT_11, GRAYED
+			MENUITEM SEPARATOR
+			MENUITEM " ", IDM_CONVERT_12, GRAYED
+			MENUITEM " ", IDM_CONVERT_13, GRAYED
+			MENUITEM " ", IDM_CONVERT_14, GRAYED
+			MENUITEM " ", IDM_CONVERT_15, GRAYED
+		END
+		MENUITEM SEPARATOR
+		MENUITEM "&Find...\tCtrl+F",            IDM_FIND
+		MENUITEM "&Replace...\tCtrl+H",         IDM_REPLACE
+		MENUITEM "&Go To...\tCtrl+G",           IDM_GOTO
+	END
+
+	POPUP "&View"
+	BEGIN
+		MENUITEM "F&ull Screen\tF11",           IDM_FULLSCREEN
+		POPUP "&Tabstop"
+		BEGIN
+			MENUITEM "default",                 IDM_TABSTOP_0
+			MENUITEM "1",                       IDM_TABSTOP_1
+			MENUITEM "2",                       IDM_TABSTOP_2
+			MENUITEM "3",                       IDM_TABSTOP_3
+			MENUITEM "4",                       IDM_TABSTOP_4
+			MENUITEM "6",                       IDM_TABSTOP_6
+			MENUITEM "8",                       IDM_TABSTOP_8
+			MENUITEM "12",                      IDM_TABSTOP_12
+			MENUITEM "16",                      IDM_TABSTOP_16
+		END
+		POPUP "&Keypad"
+		BEGIN
+			MENUITEM "&Standard",               IDM_STANDARD, GRAYED
+			MENUITEM "S&cientific",             IDM_SCIENTIFIC, GRAYED
+			MENUITEM "St&atistics",             IDM_STATISTICS, GRAYED
+			MENUITEM "&Programming",            IDM_PROGRAMMING, GRAYED
+			MENUITEM SEPARATOR
+			MENUITEM "&Basic Text",             IDM_BASIC_TEXT, GRAYED
+			MENUITEM "&Unicode Text",           IDM_UNICODE_TEXT, GRAYED
+			MENUITEM SEPARATOR
+			MENUITEM "&None",                   IDM_VIEW_NONE, GRAYED
+		END
+		MENUITEM "&Font...",                    IDM_FONT
+	END
+
+	POPUP "&Tools"
+	BEGIN
+		MENUITEM "&Evaluate\tShift+Enter",      IDC_EVAL_BUTTON
+		#ifdef LIBRODT
+		MENUITEM SEPARATOR
+		MENUITEM "Take Camera Picture",         IDM_TAKE_PICTURE
+		MENUITEM "Save All Objects...",         IDM_SAVEALLOBJECTS
+		MENUITEM "Remove All Objects",          IDM_REMOVEALLOBJECTS
+		#endif
+		MENUITEM SEPARATOR
+		MENUITEM "&Previous container",         IDC_PREV_BUTTON
+		MENUITEM "&Next container",             IDC_NEXT_BUTTON
+		MENUITEM "&Delete container",           IDC_DELETE_BUTTON
+		MENUITEM "&Clear container path",       IDC_CLEAR_BUTTON
+	END
+
+	POPUP "&Help"
+	BEGIN
+		MENUITEM "&Help...\tF1",               IDM_HELP, GRAYED
+		MENUITEM "&About...",                  IDM_ABOUT
+	END
+END
+
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Accelerator Table
+//
+// Used for keyboard shorcuts
+//
+
+IDR_ACCELERATOR ACCELERATORS
+BEGIN
+	0x4E     , IDM_NEW       , VIRTKEY, CONTROL         // Ctrl+N
+	0x4F     , IDM_OPEN      , VIRTKEY, CONTROL         // Ctrl+O
+	0x53     , IDM_SAVE      , VIRTKEY, CONTROL         // Ctrl+S
+	0x50     , IDM_PRINT     , VIRTKEY, CONTROL         // Ctrl+P
+
+
+	0x5A     , IDM_UNDO      , VIRTKEY, CONTROL         // Ctrl+Z
+	0x5A     , IDM_REDO      , VIRTKEY, CONTROL, SHIFT  // Ctrl+Shift+Z
+	0x59     , IDM_REDO      , VIRTKEY, CONTROL         // Ctrl+Y
+	0x58     , IDM_CUT       , VIRTKEY, CONTROL         // Ctrl+X
+	0x43     , IDM_COPY      , VIRTKEY, CONTROL         // Ctrl+C
+	0x56     , IDM_PASTE     , VIRTKEY, CONTROL         // Ctrl+V
+	VK_DELETE, IDM_DELETE    , VIRTKEY, CONTROL         // DEL key
+
+	0x41     , IDM_SELECTALL , VIRTKEY, CONTROL         // Ctrl+A
+
+	0x46     , IDM_FIND      , VIRTKEY, CONTROL         // Ctrl+F
+	0x48     , IDM_REPLACE   , VIRTKEY, CONTROL         // Ctrl+H
+	0x47     , IDM_GOTO      , VIRTKEY, CONTROL         // Ctrl+G
+
+
+	VK_RETURN, IDM_FULLSCREEN, VIRTKEY, SHIFT, ALT      // Shift+Alt+Enter
+	VK_F11   , IDM_FULLSCREEN, VIRTKEY                  // F11
+
+
+	VK_RETURN, IDC_EVAL_BUTTON, VIRTKEY, SHIFT          // Shift+Enter
+	VK_SPACE , IDC_PAUSE_BUTTON, VIRTKEY, CONTROL       // Ctrl+Space
+
+	VK_F1    , IDM_HELP, VIRTKEY                        // F1
+	VK_HELP  , IDM_HELP, VIRTKEY                        // HELP key
+END
+
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// 'About' Dialog Box
+//
+// After BEGIN, the lines are in the format:
+// value , type , x_position , y_position , x_size , y_size
+//
+
+IDD_ABOUTBOX DIALOG  10, 20, 160, 100
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+#ifdef LIBRODT
+CAPTION "About Rhyscitlema Graph Plotter 3D"
+#else
+CAPTION "About Rhyscitlema Calculator"
+#endif
+FONT 10, "Arial"
+BEGIN
+	ICON  IDI_APP_ICON                             , IDC_MYICON, 10,20, 20,20
+	#ifdef LIBRODT
+	LTEXT "Rhyscitlema Graph Plotter 3D"           , IDC_STATIC, 40,10,110,10
+	#else
+	LTEXT "Rhyscitlema Calculator"                 , IDC_STATIC, 40,10,110,10
+	#endif
+	LTEXT "Version 1.2"                            , IDC_STATIC, 40,22,110,10
+	LTEXT "Copyright (C) 2018"                     , IDC_STATIC, 40,34,110,10
+	LTEXT "By Rhyscitlema"                         , IDC_STATIC, 40,50,110,10
+	LTEXT "http://www.rhyscitlema.com/applications", IDC_STATIC, 15,65,140,10
+	DEFPUSHBUTTON "OK"                             , IDOK      , 60,80, 40,12 ,WS_GROUP
+END
+
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// 'GoTo' Dialog Box
+//
+// After BEGIN, the lines are in the format:
+// value , type , x_position , y_position , x_size , y_size
+//
+
+IDD_GOTOBOX DIALOG  170, 100, 133, 45
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "Go To"
+FONT 10, "Arial"
+BEGIN
+	LTEXT "Go to line number:" , IDC_STATIC,  3,  3, 80, 12
+	EDITTEXT                     IDC_EDIT0 ,  3, 15,127, 12
+	DEFPUSHBUTTON "OK"         , IDOK      , 35, 30, 40, 12 ,WS_GROUP
+	DEFPUSHBUTTON "Cancel"     , IDCANCEL  , 85, 30, 40, 12 ,WS_GROUP
+END

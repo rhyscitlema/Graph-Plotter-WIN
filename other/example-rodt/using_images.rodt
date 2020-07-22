@@ -1,0 +1,77 @@
+0;
+
+type = "Rhyscitlema_Objects_Definition_Text" ;
+
+message = "
+           left-click on a graph
+
+      or  right-click on a camera
+
+
+ click, maintain and move the mouse to turn
+
+ press ctrl, maintain and move the mouse to shift
+
+
+ More at http://www.rhyscitlema.com/applications
+
+";
+
+\rfet{0;
+ type =  "Camera";
+ name =  "Camera 1";
+ file = "|file.rfet";
+
+ origin =  movement + (0,0,-30);
+
+ axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
+
+ rectangle = (100, 100, 800, 600, 0 ,0) := LHS + CameraResize ;
+
+ zoom =  1 := file.zoomCamera(PATH,LHS) ;
+
+ private movement  = ((0,0,0) := file.moveCamera(PATH,LHS));
+ private turnAngle = ((0,0,0) := file.turnCamera(PATH,LHS));
+}
+
+\rfet{ width, height ;
+
+ type =  "Surface" ;
+ name =  "Image 1" ;
+ file = "|file.rfet";
+
+ origin = movement + {0,0,0};
+
+ axes = file.Turn((1,0,0), (0,1,0), (0,1,0), turnAngle);
+
+ private  movement  =  (0,0,0) := file.moveObject(PATH,LHS) ;
+ enclosed turnAngle =  (0,0,0) := file.turnObject(PATH,LHS) ;
+
+ enclosed bdy = 8 ;
+ enclosed bdx = bdy ;
+ boundary =  {0, bdx, 0, bdy, 0, 0} ;
+
+ private image = "image.jpeg";
+ private wh = GetImageWidthHeight(image) - (1,1);
+ enclosed width  = wh[0];
+ enclosed height = wh[1];
+
+ colour(x,y,z) = GetImagePixelColour(image, x*width/bdx, y*height/bdy);
+
+ function(x,y,z) =  0 ;
+ accuracy =  1 ;
+}
+
+\rfet{ width, height ;
+
+ type =  "Image 1" ;
+ name =  "Image 2" ;
+
+ origin = movement + {0,-8.3,0};
+
+ private movement  =  (0,0,0) := file.moveObject(PATH,LHS) ;
+ replace turnAngle =  (0,0,0) := file.turnObject(PATH,LHS) ;
+
+ replace bdx = bdy * width/height ;
+}
+

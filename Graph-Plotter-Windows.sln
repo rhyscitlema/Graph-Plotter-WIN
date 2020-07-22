@@ -11,24 +11,24 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graph-Plotter-Windows", "Gr
 		{D11F62E5-B0E3-49CD-BD16-3A0A1908D550} = {D11F62E5-B0E3-49CD-BD16-3A0A1908D550}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib_std", "..\..\lib_std\visualstudio\lib_std.vcxproj", "{78387B63-418B-4A40-9F45-779FD389A6AA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib_std", "..\lib_std\lib_std.vcxproj", "{78387B63-418B-4A40-9F45-779FD389A6AA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "algorithms", "..\..\algorithms\visualstudio\algorithms.vcxproj", "{66504103-C495-4C1A-9144-7CBC7D5B2A59}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "algorithms", "..\algorithms\algorithms.vcxproj", "{66504103-C495-4C1A-9144-7CBC7D5B2A59}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librfet", "..\..\librfet\visualstudio\librfet.vcxproj", "{1E46DB5B-70BE-4E2E-AB75-504D9BF3553B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librfet", "..\librfet\librfet.vcxproj", "{1E46DB5B-70BE-4E2E-AB75-504D9BF3553B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{66504103-C495-4C1A-9144-7CBC7D5B2A59} = {66504103-C495-4C1A-9144-7CBC7D5B2A59}
 		{78387B63-418B-4A40-9F45-779FD389A6AA} = {78387B63-418B-4A40-9F45-779FD389A6AA}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librodt", "..\..\librodt\visualstudio\librodt.vcxproj", "{D11F62E5-B0E3-49CD-BD16-3A0A1908D550}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librodt", "..\librodt\librodt.vcxproj", "{D11F62E5-B0E3-49CD-BD16-3A0A1908D550}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E5989C30-4C35-4704-B28E-D79A1715CE62} = {E5989C30-4C35-4704-B28E-D79A1715CE62}
 		{1E46DB5B-70BE-4E2E-AB75-504D9BF3553B} = {1E46DB5B-70BE-4E2E-AB75-504D9BF3553B}
 		{78387B63-418B-4A40-9F45-779FD389A6AA} = {78387B63-418B-4A40-9F45-779FD389A6AA}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librwif", "..\..\read_write_image_file\visualstudio\librwif.vcxproj", "{E5989C30-4C35-4704-B28E-D79A1715CE62}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librwif", "..\read_write_image_file\librwif.vcxproj", "{E5989C30-4C35-4704-B28E-D79A1715CE62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,62 @@
+0;
+
+type = "Rhyscitlema_Objects_Definition_Text" ;
+
+\rfet{0;
+ type = "Surface";
+ name = "Background";
+ axes =  (1,0,0), (0,1,0), (0,0,1);
+ boundary =  {0,0,0,0,0,0} ;
+ accuracy =  1 ;
+ function(x,y,z) =  0 ;
+ enclosed B = 100000000 ;
+}
+
+\rfet{0;
+ type =  "Background" ;
+ name =  "Background Negative X" ;
+ origin =  (-B, 0, 0);
+ boundary  =  {0,0,-B,B,-B,B} ;
+ colour(x,y,z) = { 0.6, 0, 0.6, 1 };
+}
+
+\rfet{0;
+ type =  "Background" ;
+ name =  "Background Positive X" ;
+ origin =  (B, 0, 0);
+ boundary =  {0,0,-B,B,-B,B} ;
+ colour(x,y,z) = { 0, 0.6, 0.6, 1 };
+}
+
+\rfet{0;
+ type =  "Background" ;
+ name =  "Background Negative Y" ;
+ origin =  (0,-B, 0);
+ boundary =  {-B,B,0,0,-B,B} ;
+ colour(x,y,z) = { 0.6, 0, 0, 1 };
+}
+
+\rfet{0;
+ type =  "Background" ;
+ name =  "Background Positive Y" ;
+ origin =  (0, B, 0);
+ boundary =  {-B,B,0,0,-B,B} ;
+ colour(x,y,z) = { 0, 0.6, 0, 1 };
+}
+
+\rfet{0;
+ type =  "Background" ;
+ name =  "Background Negative Z" ;
+ origin =  (0, 0,-B);
+ boundary =  {-B,B,-B,B,0,0} ;
+ colour(x,y,z) = { 0, 0.3, 0.6, 1 };
+}
+
+\rfet{0;
+ type =  "Background" ;
+ name =  "Background Positive Z" ;
+ origin =  (0, 0, B);
+ boundary =  {-B,B,-B,B,0,0} ;
+ colour(x,y,z) = { 0.6, 0.6, 0.6, 1 };
+}
+

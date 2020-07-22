@@ -6,20 +6,20 @@ CALC_OUT_FILE = Rhyscitlema_Calculator.exe
 
 GP3D_OUT_FILE = Graph_Plotter_3D.exe
 
-CALC_OBJ_FILES = userinterface\main.o \
-                 userinterface\files.o \
-                 userinterface\keyboard.o \
-                 userinterface\userinterface.o \
-                 userinterface\resource.res \
-                 userinterface\font.o \
-                 userinterface\dialog_boxes\about.o \
-                 userinterface\dialog_boxes\print.o \
-                 userinterface\dialog_boxes\create.o \
-                 userinterface\dialog_boxes\find_repl.o
+CALC_OBJ_FILES = main.o \
+                 files.o \
+                 keyboard.o \
+                 userinterface.o \
+                 resource.res \
+                 font.o \
+                 dialog_boxes\about.o \
+                 dialog_boxes\print.o \
+                 dialog_boxes\create.o \
+                 dialog_boxes\find_repl.o
 
 GP3D_OBJ_FILES = $(CALC_OBJ_FILES) \
-                 userinterface\drawing_window.o \
-                 #userinterface\mthread.o
+                 drawing_window.o \
+                 # mthread.o
 
 LIBALGO = ../algorithms
 LIB_STD = ../lib_std
@@ -102,9 +102,8 @@ clean:
 	cd $(LIB_STD) && $(MAKE) clean
 	cd $(LIBRFET) && $(MAKE) clean
 	cd $(LIBRODT) && $(MAKE) clean
-	cd userinterface && $(RM) *.o *.res
-	cd userinterface\dialog_boxes && $(RM) *.o
-	$(RM) *.exe
+	cd dialog_boxes && $(RM) *.o
+	$(RM) *.o *.res *.exe
 	cd $(LIBRWIF) && $(MAKE) clean
 
 #-------------------------------------------------

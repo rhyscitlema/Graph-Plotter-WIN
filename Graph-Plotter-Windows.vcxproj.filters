@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="drawing_window.c" />
+    <ClCompile Include="files.c" />
+    <ClCompile Include="font.c" />
+    <ClCompile Include="keyboard.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="mthread.c" />
+    <ClCompile Include="undo_redo.c" />
+    <ClCompile Include="userinterface.c" />
+    <ClCompile Include="dialog_boxes\about.c">
+      <Filter>dialog_boxes</Filter>
+    </ClCompile>
+    <ClCompile Include="dialog_boxes\create.c">
+      <Filter>dialog_boxes</Filter>
+    </ClCompile>
+    <ClCompile Include="dialog_boxes\find_repl.c">
+      <Filter>dialog_boxes</Filter>
+    </ClCompile>
+    <ClCompile Include="dialog_boxes\print.c">
+      <Filter>dialog_boxes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dialog_boxes.h" />
+    <ClInclude Include="font.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="undo_redo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="dialog_boxes">
+      <UniqueIdentifier>{de82f53a-807f-4544-9d63-a75b08ffae56}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

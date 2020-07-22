@@ -92,7 +92,7 @@
       <PreprocessorDefinitions>LIBRODT;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4204;4242;4244;4245;4255;4668;4820;</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>..\..\algorithms;..\..\lib_std;..\..\librfet;..\..\librodt;..\..\read_write_image_file</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\algorithms;..\lib_std;..\librfet;..\librodt;..\read_write_image_file</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -131,30 +131,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\userinterface\resource.rc">
+    <ResourceCompile Include="resource.rc">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LIBRODT</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\userinterface\dialog_boxes\about.c" />
-    <ClCompile Include="..\userinterface\dialog_boxes\create.c" />
-    <ClCompile Include="..\userinterface\dialog_boxes\find_repl.c" />
-    <ClCompile Include="..\userinterface\dialog_boxes\print.c" />
-    <ClCompile Include="..\userinterface\drawing_window.c" />
-    <ClCompile Include="..\userinterface\files.c" />
-    <ClCompile Include="..\userinterface\font.c" />
-    <ClCompile Include="..\userinterface\keyboard.c" />
-    <ClCompile Include="..\userinterface\main.c" />
-    <ClCompile Include="..\userinterface\mthread.c" />
-    <ClCompile Include="..\userinterface\undo_redo.c" />
-    <ClCompile Include="..\userinterface\userinterface.c" />
+    <ClCompile Include="dialog_boxes\about.c" />
+    <ClCompile Include="dialog_boxes\create.c" />
+    <ClCompile Include="dialog_boxes\find_repl.c" />
+    <ClCompile Include="dialog_boxes\print.c" />
+    <ClCompile Include="drawing_window.c" />
+    <ClCompile Include="files.c" />
+    <ClCompile Include="font.c" />
+    <ClCompile Include="keyboard.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="mthread.c" />
+    <ClCompile Include="undo_redo.c" />
+    <ClCompile Include="userinterface.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\userinterface\dialog_boxes.h" />
-    <ClInclude Include="..\userinterface\font.h" />
-    <ClInclude Include="..\userinterface\main.h" />
-    <ClInclude Include="..\userinterface\resource.h" />
-    <ClInclude Include="..\userinterface\undo_redo.h" />
+    <ClInclude Include="dialog_boxes.h" />
+    <ClInclude Include="font.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="undo_redo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
